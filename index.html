@@ -112,8 +112,8 @@ const IND=[["Human health & social work activities", 122], ["Wholesale & retail 
 const IND_PERIOD="Jul–Sep 2026",IND_TOTAL=691;
 (function(){
  const max=IND[0][1],el=document.createElement("section");el.className="card wide";
- el.innerHTML=`<h2>Job vacancies by industry</h2><div class="big">${IND[0][1]}k</div>
- <div class="deltas"><span>${IND[0][0]}: the most vacancies of any industry. UK total ${IND_TOTAL}k, ${IND_PERIOD} (provisional)</span></div>
+ el.innerHTML=`<h2>Job vacancies by industry</h2><div class="big">${IND_TOTAL}k</div>
+ <div class="deltas"><span>UK total vacancies, ${IND_PERIOD} (provisional). Largest industry: ${IND[0][0]}, ${IND[0][1]}k</span></div>
  <div class="bars" role="list">${IND.map(r=>`<div class="brow" role="listitem" title="${r[0]}: ${r[1]},000 vacancies"><div class="bl">${r[0]}</div><div class="bt"><div class="bb" style="width:${Math.max(r[1]/max*100,.8)}%"></div><div class="bv">${r[1]}k</div></div></div>`).join("")}</div>
  <details><summary>View data table</summary><div class="tbl"><table><tr><th>Industry (SIC 2007 section)</th><th>Vacancies</th></tr>${IND.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}k</td></tr>`).join("")}</table></div></details>
  <div class="src">Source: ONS, Vacancy Survey, dataset VACS02 (series JP9H–JP9Y) · Period: ${IND_PERIOD} (provisional) · Released ${RELEASE}. Sectors sum to 693k against the 691k total because each is rounded separately. Excludes agriculture, households as employers and employment agencies.</div>`;
