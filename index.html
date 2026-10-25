@@ -30,6 +30,15 @@ summary{cursor:pointer}
 table{border-collapse:collapse;width:100%}
 td,th{padding:2px 8px;text-align:right;border-bottom:1px solid var(--grid)}
 th:first-child,td:first-child{text-align:left}
+.wide{grid-column:1/-1}
+.bars{margin-top:14px;display:grid;gap:6px}
+.brow{display:grid;grid-template-columns:minmax(150px,300px) 1fr;gap:12px;align-items:center;padding:2px 0}
+.brow:hover .bb{filter:brightness(1.25)}
+.bl{font-size:13px;color:var(--ink2);line-height:1.25}
+.bt{display:flex;align-items:center;gap:8px;min-width:0}
+.bb{height:14px;background:var(--accent);border-radius:0 4px 4px 0;min-width:2px}
+.bv{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
+@media(max-width:620px){.brow{grid-template-columns:1fr;gap:3px}}
 footer{margin-top:22px;color:var(--muted);font-size:12.5px}
 .ax{fill:var(--muted);font-size:11px}
 </style>
@@ -47,14 +56,16 @@ const DATA={"emp": [["2021 JUL", 74.9], ["2021 AUG", 75.1], ["2021 SEP", 75.0], 
 const MON=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
 const NM=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const ix=l=>{const[y,m]=l.split(" ");return +y*12+MON.indexOf(m)};
-const end=l=>{const[y,m]=l.split(" ");return NM[MON.indexOf(m)]+" "+y};
-const span=l=>{const i=ix(l),s=i-2;return NM[s%12]+(Math.floor(s/12)===Math.floor(i/12)?"":" "+Math.floor(s/12))+"–"+end(l)};
+// ONS dates LFS and vacancies series by the middle month of the three-month period, earnings by the last
+const mn=i=>NM[i%12]+" "+Math.floor(i/12);
+const end=(l,mid)=>mn(ix(l)+(mid?1:0));
+const span=(l,mid)=>{const e=ix(l)+(mid?1:0),s=e-2;return NM[s%12]+(Math.floor(s/12)===Math.floor(e/12)?"":" "+Math.floor(s/12))+"–"+mn(e)};
 const fmt=(v,d)=>v.toLocaleString("en-GB",{minimumFractionDigits:d,maximumFractionDigits:d});
 const CARDS=[
- {id:"emp",title:"Employment rate",sub:"People aged 16 to 64 in work",unit:"%",d:1,kind:"rate",cdid:"LF24",ds:"Labour Force Survey"},
- {id:"unemp",title:"Unemployment rate",sub:"People aged 16 and over",unit:"%",d:1,kind:"rate",cdid:"MGSX",ds:"Labour Force Survey"},
- {id:"inact",title:"Economic inactivity rate",sub:"People aged 16 to 64 not working or looking for work",unit:"%",d:1,kind:"rate",cdid:"LF2S",ds:"Labour Force Survey"},
- {id:"vac",title:"Job vacancies",sub:"UK total, thousands",unit:"k",d:0,kind:"level",cdid:"AP2Y",ds:"Vacancy Survey"},
+ {id:"emp",title:"Employment rate",sub:"People aged 16 to 64 in work",unit:"%",d:1,kind:"rate",cdid:"LF24",mid:true,ds:"Labour Force Survey"},
+ {id:"unemp",title:"Unemployment rate",sub:"People aged 16 and over",unit:"%",d:1,kind:"rate",cdid:"MGSX",mid:true,ds:"Labour Force Survey"},
+ {id:"inact",title:"Economic inactivity rate",sub:"People aged 16 to 64 not working or looking for work",unit:"%",d:1,kind:"rate",cdid:"LF2S",mid:true,ds:"Labour Force Survey"},
+ {id:"vac",title:"Job vacancies",sub:"UK total, thousands",unit:"k",d:0,kind:"level",cdid:"AP2Y",mid:true,ds:"Vacancy Survey"},
  {id:"rw",title:"Real wage growth",sub:"Regular pay, annual change after inflation (CPIH)",unit:"%",d:1,kind:"rate",zero:true,cdid:"A2FA",ds:"Average Weekly Earnings"}
 ];
 const grid=document.getElementById("grid");
@@ -69,13 +80,24 @@ CARDS.forEach(c=>{
  <div class="deltas">${dl(prev,"vs 3 months earlier")}${dl(yr,"vs a year earlier")}</div>
  <div class="muted" style="color:var(--muted);font-size:12px;margin-top:2px">${c.sub}</div>
  <div class="chart"></div>
- <details><summary>View data table</summary><div class="tbl"><table><tr><th>Period</th><th>${c.title}</th></tr>${s.slice().reverse().map(r=>`<tr><td>${span(r[0])}</td><td>${f(r[1])}</td></tr>`).join("")}</table></div></details>
- <div class="src">Source: ONS, ${c.ds}, series ${c.cdid} · Latest period: ${span(last[0])} · Released ${RELEASE}</div>`;
+ <details><summary>View data table</summary><div class="tbl"><table><tr><th>Period</th><th>${c.title}</th></tr>${s.slice().reverse().map(r=>`<tr><td>${span(r[0],c.mid)}</td><td>${f(r[1])}</td></tr>`).join("")}</table></div></details>
+ <div class="src">Source: ONS, ${c.ds}, series ${c.cdid} · Latest period: ${span(last[0],c.mid)} · Released ${RELEASE}</div>`;
  grid.appendChild(el);
  const host=el.querySelector(".chart");
  const draw=()=>drawChart(host,s,c,f);
  draw();new ResizeObserver(draw).observe(host);
 });
+const IND=[["Human health & social work activities", 122], ["Wholesale & retail trade; repair of motor vehicles and motor cycles", 90], ["Accommodation & food service activities", 70], ["Professional scientific & technical activities", 68], ["Administrative & support service activities", 50], ["Manufacturing", 48], ["Education", 43], ["Information & communication", 37], ["Transport & storage", 32], ["Financial & insurance activities", 31], ["Public admin & defence; compulsory social security", 29], ["Construction", 27], ["Real estate activities", 12], ["Arts, entertainment & recreation", 12], ["Other service activities", 11], ["Water supply, sewerage, waste & remediation activities", 6], ["Electricity, gas, steam & air conditioning supply", 3], ["Mining & quarrying", 2]];
+const IND_PERIOD="Jul–Sep 2026",IND_TOTAL=691;
+(function(){
+ const max=IND[0][1],el=document.createElement("section");el.className="card wide";
+ el.innerHTML=`<h2>Job vacancies by industry</h2><div class="big">${IND[0][1]}k</div>
+ <div class="deltas"><span>${IND[0][0]}: the most vacancies of any industry. UK total ${IND_TOTAL}k, ${IND_PERIOD} (provisional)</span></div>
+ <div class="bars" role="list">${IND.map(r=>`<div class="brow" role="listitem" title="${r[0]}: ${r[1]},000 vacancies"><div class="bl">${r[0]}</div><div class="bt"><div class="bb" style="width:${Math.max(r[1]/max*100,.8)}%"></div><div class="bv">${r[1]}k</div></div></div>`).join("")}</div>
+ <details><summary>View data table</summary><div class="tbl"><table><tr><th>Industry (SIC 2007 section)</th><th>Vacancies</th></tr>${IND.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}k</td></tr>`).join("")}</table></div></details>
+ <div class="src">Source: ONS, Vacancy Survey, dataset VACS02 (series JP9H–JP9Y) · Period: ${IND_PERIOD} (provisional) · Released ${RELEASE}. Sectors sum to 693k against the 691k total because each is rounded separately. Excludes agriculture, households as employers and employment agencies.</div>`;
+ grid.appendChild(el);
+})();
 function ticks(lo,hi,n){const raw=(hi-lo)/n,p=Math.pow(10,Math.floor(Math.log10(raw))),m=[1,2,2.5,5,10].find(k=>k*p>=raw)*p;
  const a=Math.floor(lo/m)*m,out=[];for(let v=a;v<=hi+1e-9;v+=m)out.push(+v.toFixed(6));return out}
 function drawChart(host,s,c,f){
@@ -85,7 +107,7 @@ function drawChart(host,s,c,f){
  const pad=(hi-lo)*.08;let ts=ticks(lo-pad,hi+pad,4);lo=ts[0];hi=ts[ts.length-1];
  const X=i=>L+(W-L-R)*i/(s.length-1),Y=v=>T+(H-T-B)*(1-(v-lo)/(hi-lo));
  let g=ts.map(t=>`<line x1="${L}" x2="${W-R}" y1="${Y(t)}" y2="${Y(t)}" stroke="${c.zero&&t===0?"var(--zero)":"var(--grid)"}" stroke-width="${c.zero&&t===0?1.5:1}"/><text class="ax" x="${L-6}" y="${Y(t)+4}" text-anchor="end">${fmt(t,c.unit==="k"?0:(hi-lo<6?1:0))}</text>`).join("");
- let xs="";for(let i=s.length-1;i>=0;i-=(W<360?24:12)){xs+=`<text class="ax" x="${X(i)}" y="${H-6}" text-anchor="${i===0?"start":i===s.length-1?"end":"middle"}">${end(s[i][0])}</text>`}
+ let xs="";for(let i=s.length-1;i>=0;i-=(W<360?24:12)){xs+=`<text class="ax" x="${X(i)}" y="${H-6}" text-anchor="${i===0?"start":i===s.length-1?"end":"middle"}">${end(s[i][0],c.mid)}</text>`}
  const pts=s.map((r,i)=>`${X(i).toFixed(1)},${Y(r[1]).toFixed(1)}`).join(" ");
  const lx=X(s.length-1),ly=Y(s[s.length-1][1]);
  host.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${c.title}, last five years, latest ${f(s[s.length-1][1])}">${g}${xs}
@@ -99,7 +121,7 @@ function drawChart(host,s,c,f){
   const i=Math.max(0,Math.min(s.length-1,Math.round((px-L)/(W-L-R)*(s.length-1))));
   const x=X(i),y=Y(s[i][1]);cx.setAttribute("x1",x);cx.setAttribute("x2",x);cx.style.display="";
   hm.setAttribute("cx",x);hm.setAttribute("cy",y);hm.style.display="";
-  tip.innerHTML=`<b>${f(s[i][1])}</b><span>${span(s[i][0])}</span>`;tip.style.display="block";
+  tip.innerHTML=`<b>${f(s[i][1])}</b><span>${span(s[i][0],c.mid)}</span>`;tip.style.display="block";
   const tw=tip.offsetWidth,left=x/sc+(x/sc+tw+14>r.width?-tw-10:10);
   tip.style.left=left+"px";tip.style.top=Math.max(0,y/sc-44)+"px"};
  const hide=()=>{tip.style.display="none";cx.style.display="none";hm.style.display="none"};
