@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UK Labour Market Dashboard</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#14181f;--ink2:#4a5361;--muted:#6b7482;--line:#e3e6eb;--grid:#eceff3;--accent:#1f5fbf;--zero:#9aa3b0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1116;--card:#171b22;--ink:#eef1f5;--ink2:#b4bcc8;--muted:#8d97a6;--line:#262c36;--grid:#222832;--accent:#6aa5f5;--zero:#667083}}
+:root[data-theme="dark"]{--bg:#0e1116;--card:#171b22;--ink:#eef1f5;--ink2:#b4bcc8;--muted:#8d97a6;--line:#262c36;--grid:#222832;--accent:#6aa5f5;--zero:#667083}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:28px 16px 40px}
+h1{font-size:24px;margin:0 0 4px}
+.sub{color:var(--ink2);margin:0 0 22px;max-width:70ch}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 18px 14px;min-width:0}
+.card h2{font-size:14px;font-weight:600;color:var(--ink2);margin:0}
+.big{font-size:40px;font-weight:700;letter-spacing:-.02em;line-height:1.1;margin:6px 0 2px}
+.deltas{color:var(--ink2);font-size:13px;display:flex;flex-wrap:wrap;gap:4px 16px}
+.chart{position:relative;margin-top:10px}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.tip{position:absolute;pointer-events:none;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:12.5px;box-shadow:0 4px 14px rgba(0,0,0,.18);white-space:nowrap;display:none;z-index:2}
+.tip b{display:block;font-size:14px}
+.tip span{color:var(--muted)}
+.src{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+.src a{color:var(--muted)}
+details{margin-top:8px;font-size:12.5px;color:var(--ink2)}
+summary{cursor:pointer}
+.tbl{max-height:200px;overflow:auto;margin-top:6px}
+table{border-collapse:collapse;width:100%}
+td,th{padding:2px 8px;text-align:right;border-bottom:1px solid var(--grid)}
+th:first-child,td:first-child{text-align:left}
+footer{margin-top:22px;color:var(--muted);font-size:12.5px}
+.ax{fill:var(--muted);font-size:11px}
+</style>
+</head>
+<body>
+<main>
+<h1>UK labour market: key indicators</h1>
+<p class="sub">Five headline measures from the Office for National Statistics, each with its last five years. Figures are seasonally adjusted. Rates and wage growth are three-month averages as published by ONS.</p>
+<div class="grid" id="grid"></div>
+<footer>Data: Office for National Statistics (ONS), <a href="https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/bulletins/employmentintheuk/latest" style="color:inherit">Labour market overview, UK</a>, released <b>20 October 2026</b>; next release 17 November 2026. Contains public sector information licensed under the Open Government Licence v3.0. Labour Force Survey estimates are subject to sampling variability and revision.</footer>
+</main>
+<script>
+const RELEASE="20 October 2026";
+const DATA={"emp": [["2021 JUL", 74.9], ["2021 AUG", 75.1], ["2021 SEP", 75.0], ["2021 OCT", 75.0], ["2021 NOV", 75.1], ["2021 DEC", 75.1], ["2022 JAN", 75.0], ["2022 FEB", 75.1], ["2022 MAR", 75.2], ["2022 APR", 75.4], ["2022 MAY", 75.0], ["2022 JUN", 74.9], ["2022 JUL", 75.0], ["2022 AUG", 75.0], ["2022 SEP", 75.0], ["2022 OCT", 75.0], ["2022 NOV", 75.1], ["2022 DEC", 75.2], ["2023 JAN", 75.1], ["2023 FEB", 75.3], ["2023 MAR", 75.5], ["2023 APR", 75.4], ["2023 MAY", 75.2], ["2023 JUN", 74.9], ["2023 JUL", 74.7], ["2023 AUG", 74.9], ["2023 SEP", 74.9], ["2023 OCT", 74.9], ["2023 NOV", 74.9], ["2023 DEC", 74.7], ["2024 JAN", 74.6], ["2024 FEB", 74.5], ["2024 MAR", 74.4], ["2024 APR", 74.4], ["2024 MAY", 74.5], ["2024 JUN", 74.7], ["2024 JUL", 75.0], ["2024 AUG", 75.0], ["2024 SEP", 74.9], ["2024 OCT", 74.8], ["2024 NOV", 75.0], ["2024 DEC", 75.0], ["2025 JAN", 75.1], ["2025 FEB", 75.1], ["2025 MAR", 75.1], ["2025 APR", 75.2], ["2025 MAY", 75.3], ["2025 JUN", 75.2], ["2025 JUL", 75.1], ["2025 AUG", 75.1], ["2025 SEP", 74.9], ["2025 OCT", 75.1], ["2025 NOV", 75.0], ["2025 DEC", 75.1], ["2026 JAN", 75.0], ["2026 FEB", 75.0], ["2026 MAR", 75.1], ["2026 APR", 75.1], ["2026 MAY", 75.1], ["2026 JUN", 75.1], ["2026 JUL", 75.3]], "unemp": [["2021 JUL", 4.5], ["2021 AUG", 4.4], ["2021 SEP", 4.3], ["2021 OCT", 4.2], ["2021 NOV", 4.2], ["2021 DEC", 4.1], ["2022 JAN", 3.9], ["2022 FEB", 3.8], ["2022 MAR", 3.8], ["2022 APR", 3.7], ["2022 MAY", 3.8], ["2022 JUN", 3.6], ["2022 JUL", 3.6], ["2022 AUG", 3.7], ["2022 SEP", 3.8], ["2022 OCT", 3.9], ["2022 NOV", 3.9], ["2022 DEC", 3.9], ["2023 JAN", 4.0], ["2023 FEB", 4.0], ["2023 MAR", 3.9], ["2023 APR", 4.0], ["2023 MAY", 4.2], ["2023 JUN", 4.4], ["2023 JUL", 4.3], ["2023 AUG", 4.1], ["2023 SEP", 4.0], ["2023 OCT", 4.0], ["2023 NOV", 3.9], ["2023 DEC", 4.1], ["2024 JAN", 4.2], ["2024 FEB", 4.3], ["2024 MAR", 4.4], ["2024 APR", 4.4], ["2024 MAY", 4.2], ["2024 JUN", 4.2], ["2024 JUL", 4.1], ["2024 AUG", 4.3], ["2024 SEP", 4.2], ["2024 OCT", 4.4], ["2024 NOV", 4.4], ["2024 DEC", 4.4], ["2025 JAN", 4.5], ["2025 FEB", 4.6], ["2025 MAR", 4.6], ["2025 APR", 4.7], ["2025 MAY", 4.7], ["2025 JUN", 4.7], ["2025 JUL", 4.8], ["2025 AUG", 5.0], ["2025 SEP", 5.1], ["2025 OCT", 5.1], ["2025 NOV", 5.2], ["2025 DEC", 5.2], ["2026 JAN", 4.9], ["2026 FEB", 5.0], ["2026 MAR", 4.9], ["2026 APR", 4.9], ["2026 MAY", 4.9], ["2026 JUN", 4.9], ["2026 JUL", 4.7]], "inact": [["2021 JUL", 21.5], ["2021 AUG", 21.4], ["2021 SEP", 21.6], ["2021 OCT", 21.6], ["2021 NOV", 21.6], ["2021 DEC", 21.7], ["2022 JAN", 21.8], ["2022 FEB", 21.9], ["2022 MAR", 21.8], ["2022 APR", 21.7], ["2022 MAY", 21.9], ["2022 JUN", 22.2], ["2022 JUL", 22.1], ["2022 AUG", 22.1], ["2022 SEP", 21.9], ["2022 OCT", 21.9], ["2022 NOV", 21.7], ["2022 DEC", 21.7], ["2023 JAN", 21.7], ["2023 FEB", 21.5], ["2023 MAR", 21.4], ["2023 APR", 21.4], ["2023 MAY", 21.4], ["2023 JUN", 21.6], ["2023 JUL", 21.9], ["2023 AUG", 21.8], ["2023 SEP", 21.9], ["2023 OCT", 22.0], ["2023 NOV", 22.0], ["2023 DEC", 22.0], ["2024 JAN", 22.1], ["2024 FEB", 22.0], ["2024 MAR", 22.1], ["2024 APR", 22.1], ["2024 MAY", 22.1], ["2024 JUN", 21.9], ["2024 JUL", 21.8], ["2024 AUG", 21.6], ["2024 SEP", 21.7], ["2024 OCT", 21.6], ["2024 NOV", 21.5], ["2024 DEC", 21.5], ["2025 JAN", 21.3], ["2025 FEB", 21.3], ["2025 MAR", 21.2], ["2025 APR", 21.0], ["2025 MAY", 20.9], ["2025 JUN", 21.0], ["2025 JUL", 21.0], ["2025 AUG", 20.9], ["2025 SEP", 21.0], ["2025 OCT", 20.8], ["2025 NOV", 20.9], ["2025 DEC", 20.7], ["2026 JAN", 21.0], ["2026 FEB", 20.9], ["2026 MAR", 21.0], ["2026 APR", 20.9], ["2026 MAY", 20.9], ["2026 JUN", 20.9], ["2026 JUL", 20.9]], "vac": [["2021 AUG", 1132.0], ["2021 SEP", 1208.0], ["2021 OCT", 1229.0], ["2021 NOV", 1244.0], ["2021 DEC", 1245.0], ["2022 JAN", 1254.0], ["2022 FEB", 1259.0], ["2022 MAR", 1277.0], ["2022 APR", 1293.0], ["2022 MAY", 1294.0], ["2022 JUN", 1272.0], ["2022 JUL", 1257.0], ["2022 AUG", 1235.0], ["2022 SEP", 1216.0], ["2022 OCT", 1170.0], ["2022 NOV", 1138.0], ["2022 DEC", 1108.0], ["2023 JAN", 1101.0], ["2023 FEB", 1089.0], ["2023 MAR", 1065.0], ["2023 APR", 1040.0], ["2023 MAY", 1029.0], ["2023 JUN", 1018.0], ["2023 JUL", 999.0], ["2023 AUG", 984.0], ["2023 SEP", 958.0], ["2023 OCT", 951.0], ["2023 NOV", 923.0], ["2023 DEC", 910.0], ["2024 JAN", 895.0], ["2024 FEB", 893.0], ["2024 MAR", 885.0], ["2024 APR", 885.0], ["2024 MAY", 872.0], ["2024 JUN", 867.0], ["2024 JUL", 853.0], ["2024 AUG", 840.0], ["2024 SEP", 828.0], ["2024 OCT", 810.0], ["2024 NOV", 805.0], ["2024 DEC", 798.0], ["2025 JAN", 793.0], ["2025 FEB", 775.0], ["2025 MAR", 759.0], ["2025 APR", 738.0], ["2025 MAY", 730.0], ["2025 JUN", 727.0], ["2025 JUL", 738.0], ["2025 AUG", 728.0], ["2025 SEP", 728.0], ["2025 OCT", 730.0], ["2025 NOV", 739.0], ["2025 DEC", 734.0], ["2026 JAN", 725.0], ["2026 FEB", 718.0], ["2026 MAR", 713.0], ["2026 APR", 710.0], ["2026 MAY", 711.0], ["2026 JUN", 707.0], ["2026 JUL", 704.0], ["2026 AUG", 691.0]], "rw": [["2021 AUG", 3.5], ["2021 SEP", 2.3], ["2021 OCT", 1.1], ["2021 NOV", 0.2], ["2021 DEC", -0.5], ["2022 JAN", -0.7], ["2022 FEB", -0.7], ["2022 MAR", -0.9], ["2022 APR", -1.8], ["2022 MAY", -2.4], ["2022 JUN", -2.8], ["2022 JUL", -2.7], ["2022 AUG", -2.7], ["2022 SEP", -2.7], ["2022 OCT", -2.6], ["2022 NOV", -2.5], ["2022 DEC", -2.5], ["2023 JAN", -2.3], ["2023 FEB", -2.2], ["2023 MAR", -1.9], ["2023 APR", -1.2], ["2023 MAY", -0.6], ["2023 JUN", 0.1], ["2023 JUL", 0.6], ["2023 AUG", 1.1], ["2023 SEP", 1.3], ["2023 OCT", 1.3], ["2023 NOV", 1.5], ["2023 DEC", 1.7], ["2024 JAN", 1.8], ["2024 FEB", 1.8], ["2024 MAR", 1.9], ["2024 APR", 2.2], ["2024 MAY", 2.5], ["2024 JUN", 2.6], ["2024 JUL", 2.4], ["2024 AUG", 2.2], ["2024 SEP", 2.1], ["2024 OCT", 2.4], ["2024 NOV", 2.4], ["2024 DEC", 2.4], ["2025 JAN", 2.1], ["2025 FEB", 2.1], ["2025 MAR", 1.8], ["2025 APR", 1.5], ["2025 MAY", 1.1], ["2025 JUN", 0.9], ["2025 JUL", 0.7], ["2025 AUG", 0.6], ["2025 SEP", 0.5], ["2025 OCT", 0.6], ["2025 NOV", 0.6], ["2025 DEC", 0.5], ["2026 JAN", 0.4], ["2026 FEB", 0.2], ["2026 MAR", 0.1], ["2026 APR", 0.1], ["2026 MAY", 0.3], ["2026 JUN", 0.6], ["2026 JUL", 0.6], ["2026 AUG", 0.6]]};
+const MON=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+const NM=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const ix=l=>{const[y,m]=l.split(" ");return +y*12+MON.indexOf(m)};
+const end=l=>{const[y,m]=l.split(" ");return NM[MON.indexOf(m)]+" "+y};
+const span=l=>{const i=ix(l),s=i-2;return NM[s%12]+(Math.floor(s/12)===Math.floor(i/12)?"":" "+Math.floor(s/12))+"–"+end(l)};
+const fmt=(v,d)=>v.toLocaleString("en-GB",{minimumFractionDigits:d,maximumFractionDigits:d});
+const CARDS=[
+ {id:"emp",title:"Employment rate",sub:"People aged 16 to 64 in work",unit:"%",d:1,kind:"rate",cdid:"LF24",ds:"Labour Force Survey"},
+ {id:"unemp",title:"Unemployment rate",sub:"People aged 16 and over",unit:"%",d:1,kind:"rate",cdid:"MGSX",ds:"Labour Force Survey"},
+ {id:"inact",title:"Economic inactivity rate",sub:"People aged 16 to 64 not working or looking for work",unit:"%",d:1,kind:"rate",cdid:"LF2S",ds:"Labour Force Survey"},
+ {id:"vac",title:"Job vacancies",sub:"UK total, thousands",unit:"k",d:0,kind:"level",cdid:"AP2Y",ds:"Vacancy Survey"},
+ {id:"rw",title:"Real wage growth",sub:"Regular pay, annual change after inflation (CPIH)",unit:"%",d:1,kind:"rate",zero:true,cdid:"A2FA",ds:"Average Weekly Earnings"}
+];
+const grid=document.getElementById("grid");
+CARDS.forEach(c=>{
+ const s=DATA[c.id],n=s.length,last=s[n-1],yr=s[n-13],prev=s[n-4];
+ const f=v=>fmt(v,c.d)+(c.unit==="k"?"k":"%");
+ const dl=(a,lab)=>{const x=last[1]-a[1];const arrow=x>0?"▲":x<0?"▼":"■";
+  if(c.unit==="k"){const p=x/a[1]*100;return `<span>${arrow} ${fmt(Math.abs(x),0)}k (${fmt(Math.abs(p),1)}%) ${lab}</span>`}
+  return `<span>${arrow} ${fmt(Math.abs(x),1)} pp ${lab}</span>`};
+ const el=document.createElement("section");el.className="card";
+ el.innerHTML=`<h2>${c.title}</h2><div class="big">${f(last[1])}</div>
+ <div class="deltas">${dl(prev,"vs 3 months earlier")}${dl(yr,"vs a year earlier")}</div>
+ <div class="muted" style="color:var(--muted);font-size:12px;margin-top:2px">${c.sub}</div>
+ <div class="chart"></div>
+ <details><summary>View data table</summary><div class="tbl"><table><tr><th>Period</th><th>${c.title}</th></tr>${s.slice().reverse().map(r=>`<tr><td>${span(r[0])}</td><td>${f(r[1])}</td></tr>`).join("")}</table></div></details>
+ <div class="src">Source: ONS, ${c.ds}, series ${c.cdid} · Latest period: ${span(last[0])} · Released ${RELEASE}</div>`;
+ grid.appendChild(el);
+ const host=el.querySelector(".chart");
+ const draw=()=>drawChart(host,s,c,f);
+ draw();new ResizeObserver(draw).observe(host);
+});
+function ticks(lo,hi,n){const raw=(hi-lo)/n,p=Math.pow(10,Math.floor(Math.log10(raw))),m=[1,2,2.5,5,10].find(k=>k*p>=raw)*p;
+ const a=Math.floor(lo/m)*m,out=[];for(let v=a;v<=hi+1e-9;v+=m)out.push(+v.toFixed(6));return out}
+function drawChart(host,s,c,f){
+ const W=host.clientWidth||320,H=190,L=38,R=14,T=12,B=24,NS="http://www.w3.org/2000/svg";
+ let lo=Math.min(...s.map(r=>r[1])),hi=Math.max(...s.map(r=>r[1]));
+ if(c.zero){lo=Math.min(lo,0);hi=Math.max(hi,0)}
+ const pad=(hi-lo)*.08;let ts=ticks(lo-pad,hi+pad,4);lo=ts[0];hi=ts[ts.length-1];
+ const X=i=>L+(W-L-R)*i/(s.length-1),Y=v=>T+(H-T-B)*(1-(v-lo)/(hi-lo));
+ let g=ts.map(t=>`<line x1="${L}" x2="${W-R}" y1="${Y(t)}" y2="${Y(t)}" stroke="${c.zero&&t===0?"var(--zero)":"var(--grid)"}" stroke-width="${c.zero&&t===0?1.5:1}"/><text class="ax" x="${L-6}" y="${Y(t)+4}" text-anchor="end">${fmt(t,c.unit==="k"?0:(hi-lo<6?1:0))}</text>`).join("");
+ let xs="";for(let i=s.length-1;i>=0;i-=(W<360?24:12)){xs+=`<text class="ax" x="${X(i)}" y="${H-6}" text-anchor="${i===0?"start":i===s.length-1?"end":"middle"}">${end(s[i][0])}</text>`}
+ const pts=s.map((r,i)=>`${X(i).toFixed(1)},${Y(r[1]).toFixed(1)}`).join(" ");
+ const lx=X(s.length-1),ly=Y(s[s.length-1][1]);
+ host.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${c.title}, last five years, latest ${f(s[s.length-1][1])}">${g}${xs}
+ <polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+ <line class="cx" y1="${T}" y2="${H-B}" stroke="var(--muted)" stroke-dasharray="3 3" style="display:none"/>
+ <circle class="hm" r="5" fill="var(--accent)" stroke="var(--card)" stroke-width="2" style="display:none"/>
+ <circle cx="${lx}" cy="${ly}" r="4.5" fill="var(--accent)" stroke="var(--card)" stroke-width="2"/>
+ <rect class="hit" x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent"/></svg><div class="tip"></div>`;
+ const svg=host.querySelector("svg"),tip=host.querySelector(".tip"),cx=svg.querySelector(".cx"),hm=svg.querySelector(".hm");
+ const show=e=>{const r=svg.getBoundingClientRect(),sc=W/r.width,px=(e.clientX-r.left)*sc;
+  const i=Math.max(0,Math.min(s.length-1,Math.round((px-L)/(W-L-R)*(s.length-1))));
+  const x=X(i),y=Y(s[i][1]);cx.setAttribute("x1",x);cx.setAttribute("x2",x);cx.style.display="";
+  hm.setAttribute("cx",x);hm.setAttribute("cy",y);hm.style.display="";
+  tip.innerHTML=`<b>${f(s[i][1])}</b><span>${span(s[i][0])}</span>`;tip.style.display="block";
+  const tw=tip.offsetWidth,left=x/sc+(x/sc+tw+14>r.width?-tw-10:10);
+  tip.style.left=left+"px";tip.style.top=Math.max(0,y/sc-44)+"px"};
+ const hide=()=>{tip.style.display="none";cx.style.display="none";hm.style.display="none"};
+ const hit=svg.querySelector(".hit");hit.addEventListener("pointermove",show);hit.addEventListener("pointerdown",show);hit.addEventListener("pointerleave",hide);
+}
+</script>
+</body>
+</html>
