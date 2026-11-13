@@ -1,0 +1,25 @@
+{
+ "club": "COV",
+ "generated": "2026-11-13T14:00Z",
+ "summary": "Thomas-Asante and Pinnock were both in the predicted XI for the Sunderland game. I found no fresh injury news on either.",
+ "claims": [
+  {
+   "player_id": 194,
+   "player": "Thomas-Asante",
+   "text": "In the predicted XI against Sunderland.",
+   "source_name": "The Football Faithful, Coventry vs Sunderland predicted line-up",
+   "source_url": "https://thefootballfaithful.com/coventry-city-vs-sunderland-predicted-lineup-and-team-news/",
+   "date": "2026-10-31",
+   "tag": "rumour"
+  },
+  {
+   "player_id": 91,
+   "player": "Pinnock",
+   "text": "In the predicted XI against Sunderland, partnering Bobby Thomas or Stephen Mfuni at centre-back.",
+   "source_name": "The Football Faithful, Coventry vs Sunderland predicted line-up",
+   "source_url": "https://thefootballfaithful.com/coventry-city-vs-sunderland-predicted-lineup-and-team-news/",
+   "date": "2026-10-31",
+   "tag": "rumour"
+  }
+ ]
+}

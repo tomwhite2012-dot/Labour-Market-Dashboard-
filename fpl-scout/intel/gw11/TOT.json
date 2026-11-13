@@ -1,0 +1,25 @@
+{
+ "club": "TOT",
+ "generated": "2026-11-13T14:00Z",
+ "summary": "Robertson and Tonali both started the October league game at Chelsea. Robertson picked up a knock against Coventry but played through it.",
+ "claims": [
+  {
+   "player_id": 502,
+   "player": "Robertson",
+   "text": "Started at Chelsea in the Premier League in October.",
+   "source_name": "Tottenham Hotspur official, confirmed line-ups",
+   "source_url": "https://www.tottenhamhotspur.com/news/1180783/confirmed-line-ups-chelsea-vs-tottenham-hotspur-premier-league-october-2026",
+   "date": "2026-10-25",
+   "tag": "confirmed"
+  },
+  {
+   "player_id": 455,
+   "player": "Tonali",
+   "text": "Started at Chelsea in the Premier League in October.",
+   "source_name": "Tottenham Hotspur official, confirmed line-ups",
+   "source_url": "https://www.tottenhamhotspur.com/news/1180783/confirmed-line-ups-chelsea-vs-tottenham-hotspur-premier-league-october-2026",
+   "date": "2026-10-25",
+   "tag": "confirmed"
+  }
+ ]
+}

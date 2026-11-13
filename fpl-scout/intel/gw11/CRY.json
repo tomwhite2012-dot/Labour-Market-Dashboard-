@@ -1,0 +1,25 @@
+{
+ "club": "CRY",
+ "generated": "2026-11-13T14:00Z",
+ "summary": "Strand Larsen is working back from the ankle injury he picked up against Besiktas in October; FPL has him at 75%. Khalaili left international duty in October with groin and foot problems.",
+ "claims": [
+  {
+   "player_id": 222,
+   "player": "Strand Larsen",
+   "text": "Recovering from an ankle injury sustained against Besiktas; reported as due back in team training.",
+   "source_name": "Gradient Sports player news",
+   "source_url": "https://fc.gradientsports.com/rankings/player/458682/news",
+   "date": "2026-11-13",
+   "tag": "rumour"
+  },
+  {
+   "player_id": 588,
+   "player": "Khalaili",
+   "text": "Left international duty with groin and foot problems he had been playing through.",
+   "source_name": "Roundtable, Crystal Palace news",
+   "source_url": "https://roundtable.io/sports/soccer/premier-league/crystal-palace/news/international-eagles-khalaili-misses-out-through-injury-timber-and-strand-larsen-involed",
+   "date": "2026-10-05",
+   "tag": "rumour"
+  }
+ ]
+}

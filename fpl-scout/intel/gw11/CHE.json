@@ -1,0 +1,24 @@
+{
+ "club": "CHE",
+ "generated": "2026-11-13T14:00Z",
+ "summary": "João Pedro may be back sooner than FPL's 'unknown return date' suggests: Sports Mole points to a possible return against Leeds on 21 November. Nothing current on Estêvão.",
+ "claims": [
+  {
+   "player_id": 165,
+   "player": "João Pedro",
+   "text": "Out with a thigh injury for a 'few weeks'; possible return listed as 21 November against Leeds.",
+   "source_name": "Sports Mole, Chelsea injury list vs Sunderland",
+   "source_url": "https://www.sportsmole.co.uk/football/chelsea/injury-news/injuries-and-suspensions/martinez-pedro-hato-latest-chelsea-injury-suspension-list-vs-sunderland_608400.html",
+   "date": "2026-11-08",
+   "tag": "rumour",
+   "effect": {
+    "avail": 0.6,
+    "gameweeks": [
+     11,
+     12,
+     13
+    ]
+   }
+  }
+ ]
+}
