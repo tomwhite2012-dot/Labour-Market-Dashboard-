@@ -1,0 +1,12 @@
+{
+  "entry_id": 60001,
+  "league_id": 2083,
+  "team_name": "Herring Berg",
+  "locks": ["Calafiori", "Matheus N.", "Gakpo", "Rice", "Szoboszlai", "João Pedro"],
+  "lock_release_if_out_gameweeks": 4,
+  "swap_threshold_xp": 2.0,
+  "horizon_gameweeks": 3,
+  "dgw_lookahead_gameweeks": 10,
+  "report_day": "Thursday 17:00 Europe/London",
+  "intel_weights": {"confirmed": 1.0, "rumour": 0.5, "fan_speculation": 0.0}
+}

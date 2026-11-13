@@ -1,0 +1,74 @@
+{
+ "gw": 11,
+ "generated": "2026-11-13T13:13+00:00",
+ "horizon": [
+  11,
+  12,
+  13
+ ],
+ "verdict": "SWAP",
+ "moves": [
+  {
+   "in": 542,
+   "out": 123,
+   "gain": 9.4,
+   "gain_next": 3.47,
+   "backups": [
+    {
+     "id": 591,
+     "gain": 7.31
+    },
+    {
+     "id": 455,
+     "gain": 6.9
+    }
+   ]
+  },
+  {
+   "in": 472,
+   "out": 36,
+   "gain": 7.64,
+   "gain_next": 1.9,
+   "backups": [
+    {
+     "id": 91,
+     "gain": 6.39
+    },
+    {
+     "id": 502,
+     "gain": 5.79
+    }
+   ]
+  },
+  {
+   "in": 194,
+   "out": 165,
+   "gain": 6.9,
+   "gain_next": 2.68,
+   "backups": [
+    {
+     "id": 598,
+     "gain": 5.58
+    },
+    {
+     "id": 347,
+     "gain": 4.59
+    }
+   ]
+  }
+ ],
+ "short_term": {
+  "in": 542,
+  "out": 123,
+  "gain": 9.4,
+  "gain_next": 3.47,
+  "meets_threshold": true
+ },
+ "medium_term": {
+  "in": 472,
+  "out": 36,
+  "gain": 7.64,
+  "gain_next": 1.9,
+  "meets_threshold": true
+ }
+}
