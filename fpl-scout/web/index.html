@@ -601,6 +601,7 @@ function renderHeader() {
   const thuLabel = fmtDate(thu.toISOString(), { weekday: "short", day: "numeric", month: "short" }) + ", 18:00";
   const opts = { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" };
   document.getElementById("clocks").innerHTML = `
+    <div class="clock"><span>Report updated</span><b>${fmtDate(m.generated, opts)}</b></div>
     <div class="clock hot"><span>Your decision</span><b>${thuLabel}</b></div>
     <div class="clock"><span>Waivers process</span><b>${fmtDate(m.waivers, opts)}</b></div>
     <div class="clock"><span>GW${m.next_gw} deadline</span><b>${fmtDate(m.deadline, opts)}</b></div>`;
