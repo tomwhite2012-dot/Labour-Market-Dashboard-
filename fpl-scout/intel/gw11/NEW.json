@@ -1,15 +1,30 @@
 {
  "club": "NEW",
- "generated": "2026-11-13T14:00Z",
- "summary": "Joelinton is out. Wissa was predicted to return up front against Everton, and Horníček remains the first-choice keeper.",
+ "generated": "2026-11-19T17:20Z",
+ "summary": "Bad news for Wissa: the preview suggests Will Osula could start ahead of him after a run without goals. Joelinton is out. Horníček stays in goal, though Arsenal away is a tough clean-sheet test.",
  "claims": [
   {
    "player_id": 464,
    "player": "Wissa",
-   "text": "Predicted to return in a four-change Newcastle XI against Everton.",
-   "source_name": "Sports Mole, Newcastle predicted XI vs Everton",
-   "source_url": "https://www.sportsmole.co.uk/football/newcastle-united/predicted-lineups/wissa-returns-in-quadruple-change-predicted-newcastle-xi-vs-everton_608135.html",
-   "date": "2026-11-01",
+   "text": "Will Osula could get another chance ahead of the misfiring Wissa.",
+   "source_name": "NBC Sports, Newcastle vs Arsenal preview",
+   "source_url": "https://www.nbcsports.com/soccer/news/how-to-watch-newcastle-vs-arsenal-live-stream-tv-team-news-prediction",
+   "date": "2026-11-19",
+   "tag": "rumour",
+   "effect": {
+    "start_prob": 0.45,
+    "gameweeks": [
+     11
+    ]
+   }
+  },
+  {
+   "player_id": null,
+   "player": "Joelinton",
+   "text": "Unavailable, along with back-up keeper Ewen Jaouen.",
+   "source_name": "NBC Sports, Newcastle vs Arsenal preview",
+   "source_url": "https://www.nbcsports.com/soccer/news/how-to-watch-newcastle-vs-arsenal-live-stream-tv-team-news-prediction",
+   "date": "2026-11-19",
    "tag": "rumour"
   }
  ]

@@ -1,24 +1,33 @@
 {
  "club": "ARS",
- "generated": "2026-11-13T14:00Z",
- "summary": "Saka is out for weeks with a quad injury. Arteta says Rice will be managed but not restricted. I found no dated update on Calafiori.",
+ "generated": "2026-11-19T17:20Z",
+ "summary": "Calafiori and Rice are both in the predicted XI at St James' Park. Saka is injured and Max Dowman is suspended. Zubimendi is a doubt with a hamstring problem from Spain duty, which would only make Rice more central.",
  "claims": [
+  {
+   "player_id": 8,
+   "player": "Calafiori",
+   "text": "Predicted to start at left-back against Newcastle.",
+   "source_name": "Premier League News Now, Arsenal predicted line-up",
+   "source_url": "https://premierleaguenewsnow.com/2026/11/19/arsenal-predicted-lineup-newcastle-united/",
+   "date": "2026-11-19",
+   "tag": "rumour"
+  },
   {
    "player_id": 13,
    "player": "Rice",
-   "text": "Arteta says Arsenal are looking after Rice but will not restrict him.",
-   "source_name": "Arsenal Today newsletter",
-   "source_url": "https://buttondown.com/arseradio/archive/nov-7-saka-out-for-weeks-five-gunners-for-england/",
-   "date": "2026-11-07",
+   "text": "Predicted to start in midfield; Zubimendi a doubt after a slight hamstring injury with Spain.",
+   "source_name": "Premier League News Now, Arsenal predicted line-up",
+   "source_url": "https://premierleaguenewsnow.com/2026/11/19/arsenal-predicted-lineup-newcastle-united/",
+   "date": "2026-11-19",
    "tag": "rumour"
   },
   {
    "player_id": null,
    "player": "Saka",
-   "text": "Out for weeks with a quad injury.",
-   "source_name": "Sports Mole, Arsenal injury list vs Hull",
-   "source_url": "https://www.sportsmole.co.uk/football/arsenal/injury-news/injuries-and-suspensions/konsa-saka-latest-arsenal-injury-suspension-list-vs-hull_608457.html",
-   "date": "2026-11-07",
+   "text": "Injured; Max Dowman suspended.",
+   "source_name": "NBC Sports, Newcastle vs Arsenal preview",
+   "source_url": "https://www.nbcsports.com/soccer/news/how-to-watch-newcastle-vs-arsenal-live-stream-tv-team-news-prediction",
+   "date": "2026-11-19",
    "tag": "rumour"
   }
  ]

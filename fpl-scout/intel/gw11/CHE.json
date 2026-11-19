@@ -1,18 +1,18 @@
 {
  "club": "CHE",
- "generated": "2026-11-13T14:00Z",
- "summary": "João Pedro may be back sooner than FPL's 'unknown return date' suggests: Sports Mole points to a possible return against Leeds on 21 November. Nothing current on Estêvão.",
+ "generated": "2026-11-19T17:20Z",
+ "summary": "João Pedro might make the Leeds game, but nothing is guaranteed after three missed league matches; treat him as a doubt. I found no current news on Estêvão. The only injury stories were from April.",
  "claims": [
   {
    "player_id": 165,
    "player": "João Pedro",
-   "text": "Out with a thigh injury for a 'few weeks'; possible return listed as 21 November against Leeds.",
-   "source_name": "Sports Mole, Chelsea injury list vs Sunderland",
-   "source_url": "https://www.sportsmole.co.uk/football/chelsea/injury-news/injuries-and-suspensions/martinez-pedro-hato-latest-chelsea-injury-suspension-list-vs-sunderland_608400.html",
-   "date": "2026-11-08",
+   "text": "Some hope he could feature against Leeds, citing journalist Simon Phillips, but nothing is guaranteed; he has missed the last three league games.",
+   "source_name": "Chelsea Chronicle",
+   "source_url": "https://www.thechelseachronicle.com/news/major-joao-pedro-update-ahead-of-chelsea-vs-leeds/",
+   "date": "2026-11-17",
    "tag": "rumour",
    "effect": {
-    "avail": 0.6,
+    "avail": 0.5,
     "gameweeks": [
      11,
      12,

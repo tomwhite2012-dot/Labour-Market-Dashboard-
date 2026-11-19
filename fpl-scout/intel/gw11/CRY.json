@@ -1,24 +1,30 @@
 {
  "club": "CRY",
- "generated": "2026-11-13T14:00Z",
- "summary": "Strand Larsen is working back from the ankle injury he picked up against Besiktas in October; FPL has him at 75%. Khalaili left international duty in October with groin and foot problems.",
+ "generated": "2026-11-19T17:20Z",
+ "summary": "Strand Larsen's ankle makes him a doubt for Coventry, even with Mateta suspended. Khalaili has rested and is expected to be available.",
  "claims": [
   {
    "player_id": 222,
    "player": "Strand Larsen",
-   "text": "Recovering from an ankle injury sustained against Besiktas; reported as due back in team training.",
-   "source_name": "Gradient Sports player news",
-   "source_url": "https://fc.gradientsports.com/rankings/player/458682/news",
-   "date": "2026-11-13",
-   "tag": "rumour"
+   "text": "Listed as doubtful with an ankle problem; Mateta serves the second game of a three-match ban.",
+   "source_name": "Sports Mole, Coventry vs Crystal Palace preview",
+   "source_url": "https://www.sportsmole.co.uk/football/coventry-city/relegation-battle/preview/coventry-vs-crystal-palace-prediction-team-news-lineups_609359.html",
+   "date": "2026-11-19",
+   "tag": "rumour",
+   "effect": {
+    "start_prob": 0.4,
+    "gameweeks": [
+     11
+    ]
+   }
   },
   {
    "player_id": 588,
    "player": "Khalaili",
-   "text": "Left international duty with groin and foot problems he had been playing through.",
-   "source_name": "Roundtable, Crystal Palace news",
-   "source_url": "https://roundtable.io/sports/soccer/premier-league/crystal-palace/news/international-eagles-khalaili-misses-out-through-injury-timber-and-strand-larsen-involed",
-   "date": "2026-10-05",
+   "text": "Rested to give himself the best chance of playing and is expected to be available.",
+   "source_name": "Brit Brief",
+   "source_url": "https://britbrief.co.uk/sports/football/khalaili-set-for-palace-return-as-frank-nears-appointment.html",
+   "date": "2026-11-19",
    "tag": "rumour"
   }
  ]

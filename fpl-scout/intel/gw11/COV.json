@@ -1,25 +1,31 @@
 {
  "club": "COV",
- "generated": "2026-11-13T14:00Z",
- "summary": "Thomas-Asante and Pinnock were both in the predicted XI for the Sunderland game. I found no fresh injury news on either.",
+ "generated": "2026-11-19T17:20Z",
+ "summary": "Pinnock is in the predicted back four against Palace. Thomas-Asante isn't in the predicted XI, with Awoniyi up front.",
  "claims": [
-  {
-   "player_id": 194,
-   "player": "Thomas-Asante",
-   "text": "In the predicted XI against Sunderland.",
-   "source_name": "The Football Faithful, Coventry vs Sunderland predicted line-up",
-   "source_url": "https://thefootballfaithful.com/coventry-city-vs-sunderland-predicted-lineup-and-team-news/",
-   "date": "2026-10-31",
-   "tag": "rumour"
-  },
   {
    "player_id": 91,
    "player": "Pinnock",
-   "text": "In the predicted XI against Sunderland, partnering Bobby Thomas or Stephen Mfuni at centre-back.",
-   "source_name": "The Football Faithful, Coventry vs Sunderland predicted line-up",
-   "source_url": "https://thefootballfaithful.com/coventry-city-vs-sunderland-predicted-lineup-and-team-news/",
-   "date": "2026-10-31",
+   "text": "Predicted XI: Van Ewijk, Mfuni, Pinnock, Dasilva in defence; Awoniyi up front.",
+   "source_name": "Sports Mole, Coventry vs Crystal Palace preview",
+   "source_url": "https://www.sportsmole.co.uk/football/coventry-city/relegation-battle/preview/coventry-vs-crystal-palace-prediction-team-news-lineups_609359.html",
+   "date": "2026-11-19",
    "tag": "rumour"
+  },
+  {
+   "player_id": 194,
+   "player": "Thomas-Asante",
+   "text": "Not in the predicted XI; Awoniyi leads the line.",
+   "source_name": "Sports Mole, Coventry vs Crystal Palace preview",
+   "source_url": "https://www.sportsmole.co.uk/football/coventry-city/relegation-battle/preview/coventry-vs-crystal-palace-prediction-team-news-lineups_609359.html",
+   "date": "2026-11-19",
+   "tag": "rumour",
+   "effect": {
+    "start_prob": 0.35,
+    "gameweeks": [
+     11
+    ]
+   }
   }
  ]
 }

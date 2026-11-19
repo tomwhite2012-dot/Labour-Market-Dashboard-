@@ -1,34 +1,57 @@
 {
  "club": "LIV",
- "generated": "2026-11-13T14:00Z",
- "summary": "Szoboszlai is back from his hamstring problem and was expected to start against Palace. Gravenberch is out with a heel injury, which should keep Mac Allister in the side.",
+ "generated": "2026-11-19T17:20Z",
+ "summary": "Szoboszlai is fit. The Hungary manager said so on record, and he trained on Thursday. Gakpo is predicted on the right of the front three. Gravenberch is a doubt, which keeps Mac Allister in the middle.",
  "claims": [
   {
    "player_id": 368,
    "player": "Szoboszlai",
-   "text": "Hamstring problem kept him out from 17 October; previewed as fit and expected to start against Crystal Palace.",
-   "source_name": "3 Added Minutes, Liverpool predicted XI vs Crystal Palace",
-   "source_url": "https://www.3addedminutes.com/sport/football/liverpool/liverpool-predicted-lineup-crystal-palace-gravenberch-9334098",
-   "date": "2026-11-07",
+   "text": "Hungary boss Marco Rossi: 'I didn't see any problem in Dominik.'",
+   "source_name": "Sports Mole, Szoboszlai injury update",
+   "source_url": "https://www.sportsmole.co.uk/football/liverpool/injury-news/news/liverpool-receive-fresh-szoboszlai-injury-update-ahead-of-man-united-clash_609237.html",
+   "date": "2026-11-19",
+   "tag": "confirmed",
+   "effect": {
+    "avail": 1.0,
+    "gameweeks": [
+     11
+    ]
+   }
+  },
+  {
+   "player_id": 368,
+   "player": "Szoboszlai",
+   "text": "Trained on Thursday with Van Dijk, Gravenberch and Isak; formal update at Friday's 1.30pm press conference.",
+   "source_name": "Anfield Index",
+   "source_url": "https://anfieldindex.com/103449/liverpool-stars-return-to-training-ahead-of-manchester-united-clash.html",
+   "date": "2026-11-19",
    "tag": "rumour"
   },
   {
-   "player_id": null,
-   "player": "Gravenberch",
-   "text": "Listed as out with a heel injury.",
-   "source_name": "Sports Mole, Liverpool injury list vs Palace",
-   "source_url": "https://www.sportsmole.co.uk/football/liverpool/injury-news/injuries-and-suspensions/latest-on-gravenberch-and-ekitike-liverpool-injury-suspension-list-vs-palace_608556.html",
-   "date": "2026-11-08",
+   "player_id": 367,
+   "player": "Gakpo",
+   "text": "Predicted on the right of the front three, with Szoboszlai and Mac Allister in central midfield.",
+   "source_name": "Brit Brief, Liverpool XI vs Man Utd",
+   "source_url": "https://britbrief.co.uk/sports/football/liverpool-vs-man-utd-van-dijk-and-gravenberch-doubts.html",
+   "date": "2026-11-19",
    "tag": "rumour"
   },
   {
-   "player_id": 372,
-   "player": "Mac Allister",
-   "text": "Has started Liverpool's last five matches, though his form has been described as poor.",
-   "source_name": "Sports Illustrated, Liverpool XI vs Sunderland",
-   "source_url": "https://www.si.com/soccer/liverpool-xi-vs-sunderland-injury-news-predicted-lineup-2-11-26",
-   "date": "2026-11-02",
-   "tag": "rumour"
+   "player_id": 368,
+   "player": "Szoboszlai",
+   "text": "Predicted to start in central midfield alongside Mac Allister.",
+   "source_name": "Brit Brief, Liverpool XI vs Man Utd",
+   "source_url": "https://britbrief.co.uk/sports/football/liverpool-vs-man-utd-van-dijk-and-gravenberch-doubts.html",
+   "date": "2026-11-19",
+   "tag": "rumour",
+   "effect": {
+    "start_prob": 0.9,
+    "gameweeks": [
+     11,
+     12,
+     13
+    ]
+   }
   }
  ]
 }

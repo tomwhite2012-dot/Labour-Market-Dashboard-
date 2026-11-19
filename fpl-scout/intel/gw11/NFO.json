@@ -1,6 +1,16 @@
 {
  "club": "NFO",
- "generated": "2026-11-13T14:00Z",
- "summary": "I found nothing current on Murillo. Every injury story I turned up was from an earlier season.",
- "claims": []
+ "generated": "2026-11-19T17:20Z",
+ "summary": "Murillo is in the predicted back three at Bournemouth and has no injury news. Domínguez is unlikely to play.",
+ "claims": [
+  {
+   "player_id": 472,
+   "player": "Murillo",
+   "text": "Predicted in a back three with Jair Cunha and Milenković; Domínguez unlikely with a muscle injury.",
+   "source_name": "FreeTips, Bournemouth vs Nottingham Forest preview",
+   "source_url": "https://www.freetips.com/football/english-premier-league/bournemouth-vs-nottingham-forest-betting-tips-20261119-0004/",
+   "date": "2026-11-19",
+   "tag": "rumour"
+  }
+ ]
 }

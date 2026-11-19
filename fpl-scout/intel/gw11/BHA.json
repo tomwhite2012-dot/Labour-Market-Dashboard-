@@ -1,0 +1,25 @@
+{
+ "club": "BHA",
+ "generated": "2026-11-19T17:20Z",
+ "summary": "Hinshelwood is a bench option: he came on in the 78th minute against Brentford, and the lineup sites only give him a coin-flip chance of starting at Hull.",
+ "claims": [
+  {
+   "player_id": 123,
+   "player": "Hinshelwood",
+   "text": "Came off the bench in the 78th minute of the 2-0 win over Brentford.",
+   "source_name": "Rotowire",
+   "source_url": "https://www.rotowire.com/soccer/headlines/jack-hinshelwood-news-one-shot-in-brief-late-appearance-545862",
+   "date": "2026-11-19",
+   "tag": "rumour"
+  },
+  {
+   "player_id": 123,
+   "player": "Hinshelwood",
+   "text": "Projected in central midfield against Hull at 50% confidence.",
+   "source_name": "Lineup Builder, Brighton predicted line-up",
+   "source_url": "https://www.lineup-builder.co.uk/clubs/brighton",
+   "date": "2026-11-19",
+   "tag": "fan_speculation"
+  }
+ ]
+}

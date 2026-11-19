@@ -1,15 +1,15 @@
 {
  "club": "AVL",
- "generated": "2026-11-13T14:00Z",
- "summary": "Maatsen is back after more than a month out with an ankle injury, but Villa's last line-up news didn't mention him.",
+ "generated": "2026-11-19T17:20Z",
+ "summary": "Maatsen is expected to start at left-back against Sunderland.",
  "claims": [
   {
    "player_id": 36,
    "player": "Maatsen",
-   "text": "Returned after more than a month out with an ankle injury; in the predicted XI against Fulham.",
-   "source_name": "3 Added Minutes, Aston Villa predicted XI vs Fulham",
-   "source_url": "https://www.3addedminutes.com/sport/football/aston-villa/aston-villa-predicted-xi-fulham-nine-changes-goretzka-9317631",
-   "date": "2026-10-31",
+   "text": "Expected to start at left-back in a 4-2-3-1.",
+   "source_name": "3 Added Minutes, Aston Villa predicted XI vs Sunderland",
+   "source_url": "https://www.3addedminutes.com/sport/football/aston-villa/aston-villa-predicted-xi-sunderland-manzambi-call-9361045",
+   "date": "2026-11-19",
    "tag": "rumour"
   }
  ]
