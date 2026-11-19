@@ -156,6 +156,7 @@ td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
 tr:last-child td { border-bottom: 0; }
 td.name b { font-weight: 600; }
 td.news { white-space: normal; min-width: 180px; font-size: 12.5px; color: var(--muted); }
+.range { font-size: 11px; color: var(--muted); font-weight: 400; }
 .xpbar { display: inline-block; height: 6px; border-radius: 3px; background: var(--good); vertical-align: middle; margin-left: 6px; opacity: .75; }
 tr.me td { background: var(--warn-bg); }
 .filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
@@ -335,7 +336,7 @@ function playerTable(ids, opts = {}) {
       <td class="name"><b>${esc(p.name)}</b>${statusPill(p)}${lock}<div class="muted" style="font-size:12px">${esc(p.team)} · ${p.pos}</div></td>
       ${opts.owner !== false ? `<td>${ownerPill(p)}</td>` : ""}
       ${fx}
-      <td class="r"><b>${f1(p.xp_total)}</b><span class="xpbar" style="width:${Math.round(40 * p.xp_total / maxXp)}px"></span></td>
+      <td class="r"><b>${f1(p.xp_total)}</b><span class="xpbar" style="width:${Math.round(40 * p.xp_total / maxXp)}px"></span>${p.range ? `<div class="range" title="80% of simulated outcomes fall in this range">${p.range[0]}–${p.range[2]}</div>` : ""}</td>
       <td class="r">${pct(p.p_start_next)}</td>
       <td class="r">${Math.round(p.gws[0] ? p.gws[0].e_mins : 0)}</td>
       <td class="r">${pct(p.p_return_next)}</td>
@@ -347,7 +348,7 @@ function playerTable(ids, opts = {}) {
   }).join("");
   return `<div class="tbl-wrap"><table>
     <thead><tr><th>Player</th>${opts.owner !== false ? "<th>Owner</th>" : ""}
-      ${gws.map(g => `<th class="r">GW${g} xP</th>`).join("")}<th class="r">${gws.length}-GW xP</th>
+      ${gws.map(g => `<th class="r">GW${g} xP</th>`).join("")}<th class="r" title="Expected points, with the 10th–90th percentile range of 2,000 simulations underneath">${gws.length}-GW xP</th>
       <th class="r" title="Chance of starting next gameweek">Start</th><th class="r" title="Expected minutes next gameweek">Mins</th>
       <th class="r" title="Chance of a goal or assist next gameweek">G/A</th><th>Set pieces</th><th class="r">Pts</th><th class="r">xG / xA</th>
       ${opts.news !== false ? "<th>News</th>" : ""}</tr></thead>
@@ -359,13 +360,24 @@ function claimList(claims, emptyMsg) {
   return `<div class="card">${claims.map(c => {
     const t = tagMap[c.tag] || ["plain", c.tag];
     return `<div class="claim"><div class="meta"><span class="pill ${t[0]}">${t[1]}</span>${c.player ? `<b style="color:var(--ink)">${esc(c.player)}</b>` : ""}<span>${esc(c.date || "")}</span></div>
-      <p>${esc(c.text)}</p><div class="meta"><a href="${esc(c.source_url)}" target="_blank" rel="noopener">${esc(c.source_name || c.source_url)}</a></div></div>`;
+      <p>${esc(c.text)}</p><div class="meta"><a href="${esc(c.source_url)}" target="_blank" rel="noopener">${esc(c.source_name || c.source_url)}</a>${claimBasis(c)}</div></div>`;
   }).join("")}</div>`;
+}
+function claimBasis(c) {
+  if (!c.effect) return "";
+  if (c.tag === "fan_speculation") return ' <span class="pill plain">Shown only, not counted</span>';
+  const p = c.player_id ? pl(c.player_id) : null;
+  const keys = Object.keys(c.effect).filter(k => k !== "gameweeks");
+  const d = p && (p.intel_decisions || []).find(x => keys.includes(x.effect));
+  if (!d) return "";
+  const used = d.domains.includes(c.domain);
+  return used ? ` <span class="pill info" title="How much this changes the numbers">Counts ${Math.round(d.weight * 100)}% · ${esc(d.basis)}</span>`
+              : ' <span class="pill plain">Overruled by a newer or confirmed claim</span>';
 }
 function fixtureChips(outlook) {
   if (!outlook.length) return '<div class="empty">No fixtures in the window.</div>';
   return `<div class="fixtures">${outlook.map(f => `<div class="fx"><b>${f.opp}</b> <span class="muted">${f.home ? "H" : "A"} · GW${f.gw}</span>
-    <div>Goals for ${f.xg_for} · against ${f.xg_against}</div><div>Clean sheet ${pct(f.cs)}${f.src === "odds" ? " · odds" : ""}</div></div>`).join("")}</div>`;
+    <div>Goals for ${f.xg_for} · against ${f.xg_against}</div><div>Clean sheet ${pct(f.cs)}${f.src === "odds" ? " · odds" : ""}</div>${f.euro ? '<div><span class="pill warn">Europe within 3 days</span></div>' : ""}</div>`).join("")}</div>`;
 }
 
 /* ---------- pitch ---------- */
@@ -449,7 +461,7 @@ function openScout(i) {
   const sp = s.set_pieces;
   const html = `
     <div class="drawer-head">${headSVG(scoutLook(s.club))}<div><h2 id="drawer-title">${esc(s.label)}</h2>
-      <p>${s.mine.length ? `${s.mine.length} of your players here · ` : ""}Attack ${s.attack} · Defence ${s.defence} <span title="League average is 1.00. Higher attack is better, higher defence means they concede more.">(1.00 = average)</span></p></div>
+      <p>${s.new_manager ? '<span class="pill warn">New manager</span> ' : ""}${s.mine.length ? `${s.mine.length} of your players here · ` : ""}Attack ${s.attack} · Defence ${s.defence} <span title="League average is 1.00. Higher attack is better, higher defence means they concede more.">(1.00 = average)</span></p></div>
       <button class="close" type="button" aria-label="Close">×</button></div>
     <p class="say">${esc(say)}</p>
     <div class="sub">Next ${R.meta.horizon.length} fixtures</div>${fixtureChips(s.outlook)}
@@ -481,7 +493,8 @@ function moveCard(m, title, note) {
     <div class="kv"><span>Gain over ${R.meta.horizon.length} GWs <span class="gain${neg}">${m.gain > 0 ? "+" : ""}${f1(m.gain)}</span></span><span>Next GW <b>${m.gain_next > 0 ? "+" : ""}${f1(m.gain_next)}</b></span>
       <span>Start <b>${pct(i.p_start_next)}</b></span><span>G/A chance <b>${pct(i.p_return_next)}</b></span><span>Set pieces ${setPieceChips(i)}</span></div>
     ${m.meets_threshold === false ? `<div class="kv"><span class="pill plain">Below the +${R.chief.threshold} xP bar: watch, don't claim</span></div>` : ""}
-    ${m.backups && m.backups.length ? `<div class="kv"><span>If taken first: ${m.backups.map(b => `<b>${esc(pl(b.id).name)}</b> (+${f1(b.gain)})`).join(", ")}</span></div>` : ""}
+    ${m.p_land != null ? `<div class="kv"><span class="pill ${m.p_land >= 0.6 ? "good" : m.p_land >= 0.35 ? "warn" : "bad"}">${pct(m.p_land)} chance he reaches you</span>${m.threats && m.threats.length ? `<span>Likely rivals: <b>${m.threats.map(esc).join(", ")}</b></span>` : ""}</div>` : (m.threats && m.threats.length ? `<div class="kv"><span>Rivals ahead who may want him: <b>${m.threats.map(esc).join(", ")}</b></span></div>` : "")}
+    ${m.backups && m.backups.length ? `<div class="kv"><span>If taken first: ${m.backups.map(b => `<b>${esc(pl(b.id).name)}</b> (+${f1(b.gain)}${b.p_land != null ? `, ${pct(b.p_land)} as backup` : ""})`).join(", ")}</span></div>` : ""}
     ${note ? `<p class="muted" style="margin:8px 0 0;font-size:13px">${note}</p>` : ""}</div>`;
 }
 function xiBlock(xi, newIds) {
@@ -502,12 +515,15 @@ function chiefReport(inDrawer) {
       <div><b>${esc(c.speech[0])}</b><div class="muted" style="font-size:13px">Rule: only swap when the new player beats the one you drop by at least +${c.threshold} expected points over GW${R.meta.horizon[0]}–${R.meta.horizon[H - 1]}. Locked players stay unless they face a long-term injury.</div></div></div>
     ${c.speech.length > 1 ? `<ul class="plain">${c.speech.slice(1).map(s => `<li>${esc(s)}</li>`).join("")}</ul>` : ""}
     ${c.moves.length ? `<div class="sub">Waiver claims, in priority order</div><div class="grid2">${c.moves.map((m, k) => moveCard(m, `Claim ${k + 1}`)).join("")}</div>
-      <p class="muted" style="font-size:13px">You pick ${ordinal(myWaiver.waiver)} on waivers. ${ahead.length ? `${ahead.map(a => esc(a.team)).join(" and ")} pick${ahead.length === 1 ? "s" : ""} before you, so list the backups too.` : "Nobody picks before you."}</p>` : ""}
+      <p class="muted" style="font-size:13px">You pick ${ordinal(myWaiver.waiver)} on waivers. ${ahead.length ? `${ahead.map(a => esc(a.team)).join(" and ")} pick${ahead.length === 1 ? "s" : ""} before you.` : "Nobody picks before you."}
+      This order was chosen by simulating 3,000 waiver runs: each round, teams pick in waiver order, using what each rival needs and how often they claim. Expected gain from these claims: <b>+${f1(c.claims_expected_gain)} xP</b>. List the backups too.</p>` : ""}
     <div class="sub">Two lenses on the waiver pile</div>
     <div class="grid2">
       ${c.short_term ? moveCard(c.short_term, "Short term · high ceiling", "Best attacking upside on waivers for next gameweek: expected points plus extra weight on goal and assist chances.") : '<div class="empty">No short-term option on waivers.</div>'}
       ${c.medium_term ? moveCard(c.medium_term, "Medium term · steady", `Most expected points over ${H} gameweeks among free agents who start at least 75% of games.`) : '<div class="empty">No steady option on waivers.</div>'}
     </div>
+    <div class="sub">Trade ideas</div>${tradesBlock(c.trades)}
+    <div class="sub">Buy-low watchlist</div>${watchBlock(c.watchlist)}
     <div class="sub">Line-up</div>${xiBlock(c.xi_after || c.xi_now, newIds)}
     <div class="sub">Double and blank gameweeks</div><ul class="plain">${flags}</ul>
     <div class="sub">How sure is this?</div>
@@ -516,6 +532,19 @@ function chiefReport(inDrawer) {
       <li>Field intel received from <b>${R.meta.intel_clubs}</b> of 20 junior scouts.</li>
       <li>Data refreshed ${fmtDate(R.meta.generated, { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })} UK time.</li>
     </ul>`;
+}
+function tradesBlock(trades) {
+  if (!trades || !trades.length) return `<div class="empty">No 1-for-1 trade gains you +${R.chief.threshold} xP without leaving the other manager worse off.</div>`;
+  return `<div class="grid2">${trades.map(t => { const g = pl(t.give), r = pl(t.get); return `<div class="card">
+    <div class="move"><div class="side out"><small>Offer</small><div class="pname">${esc(g.name)}</div><div class="muted" style="font-size:13px">${g.team} · ${f1(g.xp_total)} xP</div></div>
+    <div class="arrow">⇄</div><div class="side in"><small>Ask for</small><div class="pname">${esc(r.name)}</div><div class="muted" style="font-size:13px">${r.team} · ${f1(r.xp_total)} xP</div></div></div>
+    <div class="kv"><span>With <b>${esc(t.with)}</b></span><span>Your best XI <span class="gain">+${f1(t.gain_me)}</span></span><span>Their best XI <b>${t.gain_them >= 0 ? "+" : ""}${f1(t.gain_them)}</b></span></div></div>`; }).join("")}</div>
+    <p class="muted" style="font-size:13px">Gains are best-XI expected points over the next ${R.meta.horizon.length} gameweeks. A trade they don't lose on is easier to pitch.</p>`;
+}
+function watchBlock(w) {
+  if (!w || !w.length) return '<div class="empty">Nobody worth stashing right now.</div>';
+  return `<div class="card">${w.map(x => { const p = pl(x.id); return `<div class="claim"><div class="meta"><span class="pill ${x.reason === "injured" ? "bad" : "info"}">${x.reason === "injured" ? "Injured, quality when fit" : "Recently dropped"}</span><b style="color:var(--ink)">${esc(p.name)}</b><span>${p.team} · ${p.pos}</span></div>
+    <p>${x.reason === "injured" ? `About ${f1(x.fit_xp)} xP a game once fit.` : `${f1(p.xp_total)} xP over ${R.meta.horizon.length} gameweeks.`} ${esc(x.note || "")}</p></div>`; }).join("")}</div>`;
 }
 function ordinal(n) { return n + (["th", "st", "nd", "rd"][(n % 100 - 20) % 10] || ["th", "st", "nd", "rd"][n % 100] || "th"); }
 
@@ -529,7 +558,12 @@ const TABS = [
   ["waivers", "Waiver pool", () => `<div class="filters" id="posf">${["All", "GKP", "DEF", "MID", "FWD"].map((p, i) => `<button type="button" data-pos="${p}" aria-pressed="${i === 0}">${p}</button>`).join("")}</div><div id="pool"></div>`],
   ["league", "League", () => `<div class="tbl-wrap"><table><thead><tr><th class="r">Rank</th><th>Team</th><th>Manager</th><th class="r">GW${R.meta.last_finished_gw}</th><th class="r">Total</th><th class="r">Waiver pick</th></tr></thead><tbody>
     ${R.league.map(r => `<tr${r.me ? ' class="me"' : ""}><td class="r">${r.rank}</td><td><b>${esc(r.team)}</b></td><td>${esc(r.manager)}</td><td class="r">${r.gw}</td><td class="r">${r.total}</td><td class="r">${r.waiver}</td></tr>`).join("")}</tbody></table></div>
-    <p class="muted" style="font-size:13px">Waiver pick 1 claims first. Priority runs from the bottom of the table.</p>`],
+    <p class="muted" style="font-size:13px">Waiver pick 1 claims first. Priority runs from the bottom of the table.</p>
+    <div class="sub">Rival habits and likely claims</div>
+    <div class="tbl-wrap"><table><thead><tr><th>Team</th><th class="r">Pick</th><th class="r">Claims made</th><th class="r">Won</th><th class="r" title="Share of weeks they put in a claim">Active</th><th>Favourite position</th><th>Likely claims this week</th></tr></thead><tbody>
+    ${R.league.slice().sort((a, b) => a.waiver - b.waiver).map(r => { const h = r.habits || {}; return `<tr${r.me ? ' class="me"' : ""}><td><b>${esc(r.team)}</b></td><td class="r">${r.waiver}</td><td class="r">${h.claims ?? "–"}</td><td class="r">${h.claims_won ?? "–"}</td><td class="r">${pct(h.p_active)}</td><td>${esc(h.favourite_position || "–")}</td>
+      <td class="news">${r.me ? "You" : (r.likely_claims || []).map(c => `${esc(pl(c.id).name)} (${pct(c.prob)})`).join(", ") || "Nothing obvious"}</td></tr>`; }).join("")}</tbody></table></div>
+    <p class="muted" style="font-size:13px">Likely claims compare each rival's weakest player in each position with the free agents, then scale by how often that manager actually claims. Built from the league's full transaction history.</p>`],
   ["track", "Track record", trackRecord],
   ["method", "Method & sources", method],
 ];
@@ -544,15 +578,30 @@ function trackRecord() {
     <div class="kv"><span>${e.complete ? "Graded" : e.gws_scored.length ? `Part-graded (GW${e.gws_scored.join(", ")})` : "Waiting for matches"}</span></div>
     ${e.moves.length ? `<ul class="plain">${e.moves.map(m => `<li>${esc(m.out)} → <b>${esc(m.in)}</b>: predicted +${f1(m.pred_gain)} xP${m.actual_gain != null ? `, actual ${m.actual_gain > 0 ? "+" : ""}${m.actual_gain} pts` : ""} ${m.followed ? '<span class="pill good">You made it</span>' : '<span class="pill plain">Not made</span>'}</li>`).join("")}</ul>` : ""}
     ${e.hold_check ? `<p class="muted">Hold check: ${esc(e.hold_check.best_waiver)} scored ${e.hold_check.waiver_pts} vs ${esc(e.hold_check.your_player)} ${e.hold_check.your_pts}.</p>` : ""}</div>`).join("");
-  return stats + `<p class="muted" style="font-size:13px">Each week's advice is saved before the deadline. Once its ${R.meta.horizon.length} gameweeks finish, every recommended swap is scored on real points: did the player claimed outscore the player dropped?</p>` + rows;
+  const a = R.accuracy;
+  const acc = a ? `<div class="sub">How accurate is the model?</div>
+    <div class="stat-row">
+      <div class="stat"><b>${a.mae}</b><span>Avg error, pts per player</span></div>
+      <div class="stat"><b>${a.mae_ppg}</b><span>Same for points-per-game</span></div>
+      <div class="stat"><b>${f1(a.top30_actual)}</b><span>Pts scored by model's top 30</span></div>
+      <div class="stat"><b>${f1(a.top30_naive)}</b><span>Pts by points-per-game top 30</span></div></div>
+    <p class="muted" style="font-size:13px">Replayed GW${a.gameweeks[0]}–${a.gameweeks[1]} using only data from before each gameweek (${a.players_scored.toLocaleString()} player predictions). The replay assumes everyone was fit, because past injury news isn't available, so live predictions should do slightly better. Lower error is better.</p>
+    <div class="tbl-wrap"><table><thead><tr><th>Predicted band</th><th class="r">Players</th><th class="r">Predicted avg</th><th class="r">Actual avg</th></tr></thead><tbody>
+      ${a.calibration.map(b => `<tr><td>${b.band} xP</td><td class="r">${b.n}</td><td class="r">${f1(b.pred)}</td><td class="r">${f1(b.actual)}</td></tr>`).join("")}</tbody></table></div>` : "";
+  const src = Object.entries(R.sources_reliability || {});
+  const rel = `<div class="sub">Scout source reliability</div>${src.length ? `<div class="tbl-wrap"><table><thead><tr><th>Website</th><th class="r">Claims graded</th><th class="r">Right</th></tr></thead><tbody>${src.sort((x, y) => y[1].total - x[1].total).map(([d, v]) => `<tr><td>${esc(d)}</td><td class="r">${v.total}</td><td class="r">${pct(v.hits / v.total)}</td></tr>`).join("")}</tbody></table></div>`
+    : '<div class="empty">Starts after GW11: each website\'s start and availability claims get checked against what happened, and reliable sites then count for more.</div>'}`;
+  return acc + `<div class="sub">Recommendations</div>` + stats + `<p class="muted" style="font-size:13px">Each week's advice is saved before the deadline. Once its ${R.meta.horizon.length} gameweeks finish, every recommended swap is scored on real points: did the player claimed outscore the player dropped?</p>` + rows + rel;
 }
 function method() {
   return `<div class="grid2"><div class="card"><h3>Expected points</h3><ul class="plain">
-      <li>Minutes: chance of starting and expected minutes from the last six matches, weighted to recent games, then cut by injury news, suspensions and loan rules.</li>
+      <li>Minutes: chance of starting and expected minutes from the last six matches, weighted to recent games, then cut by injury news, suspensions and loan rules. Start chances drop ${Math.round((1 - R.model_params.euro_rotation) * 100)}% when a European match is within 3 days, and become less certain for 3 gameweeks after a manager change.</li>
       <li>Team goals: from published match odds when available (70%), otherwise from season xG and goals for and against, with home advantage.</li>
-      <li>Player goals and assists: their share of team xG and xA per 90, scaled by the fixture.</li>
+      <li>Player goals and assists: xG and xA per 90, blending the season with the last six matches (${Math.round(R.model_params.recent_weight * 100)}% recent), scaled by the fixture.</li>
       <li>Clean sheets, goals conceded, saves, bonus, defensive contributions and cards use your league's own scoring settings.</li>
-      <li>Scout intel then adjusts start chances or output: confirmed claims count fully, rumours half, fan speculation not at all.</li></ul></div>
+      <li>Scout intel then adjusts availability, start chances, penalty duty or output. The newest confirmed claim wins outright. Rumours count 25% from one website and 75% when two or more independent websites agree. Fan speculation is shown but never counted. Each website's past accuracy scales its weight.</li>
+      <li>Ranges come from 2,000 simulated runs of each match: 80% of outcomes fall inside.</li>
+      <li>Settings were tuned by replaying past gameweeks. See the Track record tab.</li></ul></div>
     <div class="card"><h3>Sources</h3><ul class="plain">${R.meta.sources.map(s => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a>: ${esc(s.use)}</li>`).join("")}
       <li>Understat: planned for extra xG detail. The site was down when this report was built.</li></ul>
       <p class="muted" style="font-size:13px">No paid services and no scraping of bookmaker sites.</p></div></div>`;

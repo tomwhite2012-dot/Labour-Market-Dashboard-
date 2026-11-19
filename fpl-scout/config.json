@@ -2,11 +2,51 @@
   "entry_id": 60001,
   "league_id": 2083,
   "team_name": "Herring Berg",
-  "locks": ["Calafiori", "Matheus N.", "Gakpo", "Rice", "Szoboszlai", "João Pedro"],
+  "locks": [
+    "Calafiori",
+    "Matheus N.",
+    "Gakpo",
+    "Rice",
+    "Szoboszlai",
+    "João Pedro"
+  ],
   "lock_release_if_out_gameweeks": 4,
   "swap_threshold_xp": 2.0,
   "horizon_gameweeks": 3,
   "dgw_lookahead_gameweeks": 10,
   "report_day": "Thursday 17:00 Europe/London",
-  "intel_weights": {"confirmed": 1.0, "rumour": 0.5, "fan_speculation": 0.0}
+  "intel_weights": {
+    "confirmed": 1.0,
+    "rumour_two_sources": 0.75,
+    "rumour_single": 0.25,
+    "fan_speculation": 0.0
+  },
+  "model_params": {
+    "home_adv": 1.1,
+    "away_adv": 0.88,
+    "prior_mins": 720,
+    "strength_shrink": 2.0,
+    "xg_weight": 0.65,
+    "recent_weight": 0.3,
+    "recent_team_weight": 0.3,
+    "euro_rotation": 0.88,
+    "new_manager_blend": 0.25,
+    "cs_scale": 1.0
+  },
+  "european_matches": [
+    {
+      "club": "ARS",
+      "date": "2026-11-24",
+      "competition": "Champions League",
+      "source": "https://www.sportsmole.co.uk/football/arsenal/injury-news/injuries-and-suspensions/konsa-saka-latest-arsenal-injury-suspension-list-vs-hull_608457.html"
+    }
+  ],
+  "new_managers": [
+    {
+      "club": "CRY",
+      "since_gw": 11,
+      "manager": "Thomas Frank",
+      "source": "https://www.sportsmole.co.uk/football/coventry-city/relegation-battle/preview/coventry-vs-crystal-palace-prediction-team-news-lineups_609359.html"
+    }
+  ]
 }

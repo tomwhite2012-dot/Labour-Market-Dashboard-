@@ -1,6 +1,6 @@
 {
  "gw": 11,
- "generated": "2026-11-19T17:08+00:00",
+ "generated": "2026-11-19T17:29+00:00",
  "horizon": [
   11,
   12,
@@ -11,64 +11,151 @@
   {
    "in": 542,
    "out": 123,
-   "gain": 9.4,
-   "gain_next": 3.47,
+   "gain": 8.62,
+   "gain_next": 3.18,
    "backups": [
     {
-     "id": 591,
-     "gain": 7.31
-    },
-    {
-     "id": 455,
-     "gain": 6.9
+     "id": 372,
+     "gain": 7.3,
+     "p_land": 0.12
     }
+   ],
+   "p_land": 0.67,
+   "threats": [
+    "Eddie McGoldfish",
+    "Owlfish-Inge InLand"
    ]
   },
   {
    "in": 472,
    "out": 36,
-   "gain": 7.64,
-   "gain_next": 1.9,
+   "gain": 7.68,
+   "gain_next": 1.73,
    "backups": [
     {
      "id": 91,
-     "gain": 6.39
+     "gain": 7.19,
+     "p_land": 0.16
     },
     {
      "id": 502,
-     "gain": 5.79
+     "gain": 6.19,
+     "p_land": 0.14
     }
-   ]
+   ],
+   "p_land": 0.56,
+   "threats": []
   },
   {
-   "in": 591,
+   "in": 455,
    "out": 157,
-   "gain": 6.83,
-   "gain_next": 1.93,
+   "gain": 6.81,
+   "gain_next": 2.63,
    "backups": [
     {
-     "id": 455,
-     "gain": 6.42
+     "id": 372,
+     "gain": 6.4,
+     "p_land": 0.13
     },
     {
-     "id": 372,
-     "gain": 5.94
+     "id": 619,
+     "gain": 6.19,
+     "p_land": 0.19
     }
+   ],
+   "p_land": 0.3,
+   "threats": [
+    "Eddie McGoldfish",
+    "Owlfish-Inge InLand"
    ]
   }
  ],
  "short_term": {
   "in": 542,
   "out": 123,
-  "gain": 9.4,
-  "gain_next": 3.47,
-  "meets_threshold": true
+  "gain": 8.62,
+  "gain_next": 3.18,
+  "meets_threshold": true,
+  "threats": [
+   "Eddie McGoldfish",
+   "Owlfish-Inge InLand"
+  ]
  },
  "medium_term": {
   "in": 472,
   "out": 36,
-  "gain": 7.64,
-  "gain_next": 1.9,
-  "meets_threshold": true
- }
+  "gain": 7.68,
+  "gain_next": 1.73,
+  "meets_threshold": true,
+  "threats": []
+ },
+ "intel_effects": [
+  {
+   "player_id": 368,
+   "effect": "avail",
+   "value": 1.0,
+   "weight": 1.0,
+   "basis": "confirmed",
+   "domains": [
+    "sportsmole.co.uk"
+   ],
+   "ignored": 0
+  },
+  {
+   "player_id": 368,
+   "effect": "start_prob",
+   "value": 0.9,
+   "weight": 0.25,
+   "basis": "single rumour",
+   "domains": [
+    "britbrief.co.uk"
+   ],
+   "ignored": 0
+  },
+  {
+   "player_id": 194,
+   "effect": "start_prob",
+   "value": 0.35,
+   "weight": 0.25,
+   "basis": "single rumour",
+   "domains": [
+    "sportsmole.co.uk"
+   ],
+   "ignored": 0
+  },
+  {
+   "player_id": 464,
+   "effect": "start_prob",
+   "value": 0.4,
+   "weight": 0.75,
+   "basis": "2 independent sources",
+   "domains": [
+    "nbcsports.com",
+    "sportsmole.co.uk"
+   ],
+   "ignored": 0
+  },
+  {
+   "player_id": 222,
+   "effect": "start_prob",
+   "value": 0.4,
+   "weight": 0.25,
+   "basis": "single rumour",
+   "domains": [
+    "sportsmole.co.uk"
+   ],
+   "ignored": 0
+  },
+  {
+   "player_id": 165,
+   "effect": "avail",
+   "value": 0.5,
+   "weight": 0.25,
+   "basis": "single rumour",
+   "domains": [
+    "thechelseachronicle.com"
+   ],
+   "ignored": 0
+  }
+ ]
 }

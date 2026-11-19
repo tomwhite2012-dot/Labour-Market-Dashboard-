@@ -53,6 +53,8 @@ def fetch_all(entry_id, league_id, use_cache=False):
     d["league"] = get_json(f"{DRAFT}/league/{league_id}/details", "league.json", use_cache)
     d["status"] = get_json(f"{DRAFT}/league/{league_id}/element-status", "element_status.json", use_cache)
     d["entry"] = get_json(f"{DRAFT}/entry/{entry_id}/public", "entry.json", use_cache)
+    d["transactions"] = get_json(f"{DRAFT}/draft/league/{league_id}/transactions", "transactions.json", use_cache)
+    d["trades"] = get_json(f"{DRAFT}/draft/league/{league_id}/trades", "trades.json", use_cache)
     d["classic_boot"] = get_json(f"{CLASSIC}/bootstrap-static/", "classic_boot.json", use_cache)
     d["fixtures"] = get_json(f"{CLASSIC}/fixtures/", "fixtures.json", use_cache)
 

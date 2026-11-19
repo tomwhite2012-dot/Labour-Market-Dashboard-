@@ -13,11 +13,12 @@ import json
 import os
 import sys
 from datetime import datetime, timezone
-from itertools import product
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from draft_intel import best_claim_order, best_xi, rival_claims, rival_habits, suggest_trades, watchlist  # noqa: E402
 from fetch import ROOT, fetch_all  # noqa: E402
-from model import Model, POS  # noqa: E402
+from intel import load_intel, score_sources  # noqa: E402
+from model import Model  # noqa: E402
 
 CLUB_LABEL = {"Man City": "Man City", "Man Utd": "Man Utd", "Spurs": "Spurs", "Nott'm Forest": "Forest"}
 FPL_URL = "https://fantasy.premierleague.com/"
@@ -27,57 +28,6 @@ DRAFT_URL = "https://draft.premierleague.com/"
 def load_cfg():
     with open(os.path.join(ROOT, "config.json")) as f:
         return json.load(f)
-
-
-# ---------------------------------------------------------------- intel
-def load_intel(gw, cfg, elements):
-    """Junior-scout claims from intel/gw<N>/<CLUB>.json (written by the Thursday scout run)."""
-    weights = cfg["intel_weights"]
-    by_name = {}
-    for e in elements.values():
-        by_name.setdefault((e["web_name"].lower(), e["team"]), e["id"])
-    claims_by_club, effects = {}, {}
-    for path in glob.glob(os.path.join(ROOT, "intel", f"gw{gw}", "*.json")):
-        try:
-            doc = json.load(open(path))
-        except (OSError, ValueError):
-            continue
-        club = doc.get("club")
-        claims = []
-        for c in doc.get("claims", []):
-            tag = c.get("tag", "fan_speculation")
-            if tag not in weights or not c.get("source_url"):
-                continue  # every claim must carry a source and a valid tag
-            claims.append(c)
-            pid = c.get("player_id")
-            if pid and c.get("effect"):
-                e = dict(c["effect"])
-                e["weight"] = weights[tag]
-                if e["weight"] > 0:
-                    effects.setdefault(int(pid), []).append(e)
-        claims_by_club[club] = {"claims": claims, "summary": doc.get("summary", ""),
-                                "generated": doc.get("generated")}
-    return claims_by_club, effects
-
-
-# ---------------------------------------------------------------- lineup
-def best_xi(players, gw_index):
-    by = {p: sorted([x for x in players if x["pos"] == p], key=lambda x: -x["gws"][gw_index]["xp"]) for p in POS.values()}
-    best, best_val = None, -1
-    for d, m, f in product(range(3, 6), range(2, 6), range(1, 4)):
-        if d + m + f != 10 or len(by["DEF"]) < d or len(by["MID"]) < m or len(by["FWD"]) < f or not by["GKP"]:
-            continue
-        xi = by["GKP"][:1] + by["DEF"][:d] + by["MID"][:m] + by["FWD"][:f]
-        val = sum(x["gws"][gw_index]["xp"] for x in xi)
-        if val > best_val:
-            best, best_val = (xi, f"{d}-{m}-{f}"), val
-    if not best:
-        return None
-    xi, formation = best
-    ids = {x["id"] for x in xi}
-    bench = sorted([x for x in players if x["id"] not in ids], key=lambda x: (x["pos"] != "GKP", -x["gws"][gw_index]["xp"]))
-    return {"formation": formation, "xp": round(best_val, 1),
-            "xi": [x["id"] for x in xi], "bench": [x["id"] for x in bench]}
 
 
 # ---------------------------------------------------------------- moves
@@ -120,11 +70,12 @@ def pick_vs_squad(cand, squad, locked):
 
 
 # ---------------------------------------------------------------- track record
-def write_history(cfg, gw, chief):
+def write_history(cfg, gw, chief, decisions):
     os.makedirs(os.path.join(ROOT, "history"), exist_ok=True)
     rec = {"gw": gw, "generated": datetime.now(timezone.utc).isoformat(timespec="minutes"),
            "horizon": chief["horizon"], "verdict": chief["verdict"], "moves": chief["moves"],
-           "short_term": chief["short_term"], "medium_term": chief["medium_term"]}
+           "short_term": chief["short_term"], "medium_term": chief["medium_term"],
+           "intel_effects": decisions}
     with open(os.path.join(ROOT, "history", f"gw{gw}.json"), "w") as f:
         json.dump(rec, f, indent=1)
 
@@ -171,7 +122,8 @@ def chief_speech(verdict, moves, short, medium, P, threshold, horizon_n):
         n = len(moves)
         lines.append(f"Make {'a move' if n == 1 else f'{n} moves'} this week.")
         for m in moves:
-            lines.append(f"Bring in {P[m['in']]['name']} for {P[m['out']]['name']}: +{m['gain']:.1f} xP over {horizon_n} gameweeks.")
+            land = f", about {int(round(m['p_land'] * 100))}% chance he reaches you" if m.get("p_land") is not None else ""
+            lines.append(f"Bring in {P[m['in']]['name']} for {P[m['out']]['name']}: +{m['gain']:.1f} xP over {horizon_n} gameweeks{land}.")
     in_moves = {m["in"] for m in moves}
     if short:
         s = P[short["in"]]
@@ -197,7 +149,8 @@ def main():
     data = fetch_all(cfg["entry_id"], cfg["league_id"], use_cache=use_cache)
     next_gw = data["game"]["next_event"]
     elements = {e["id"]: e for e in data["boot"]["elements"]}
-    intel_claims, intel_effects = load_intel(next_gw, cfg, elements)
+    sources = score_sources(ROOT, Model(data, cfg))          # grade past scout claims first
+    intel_claims, intel_effects, decisions = load_intel(ROOT, next_gw, cfg)
     model = Model(data, cfg, intel_effects)
 
     owners = {s["element"]: s["owner"] for s in data["status"]["element_status"]}
@@ -214,6 +167,9 @@ def main():
         p["owner_name"] = entries[o]["entry_name"] if o in entries else None
         P[pid] = p
     names = {pid: p["name"] for pid, p in P.items()}
+    for d in decisions:
+        if d["player_id"] in P:
+            P[d["player_id"]].setdefault("intel_decisions", []).append(d)
 
     squad = [p for p in P.values() if p["owner"] == cfg["entry_id"]]
     pool = [p for p in P.values() if p["owner"] is None]
@@ -228,6 +184,29 @@ def main():
     moves = plan_moves(squad, pool, locked, thr)
     verdict = "SWAP" if moves else "HOLD"
 
+    # draft intelligence: rivals' likely claims, survival to your pick, trades, watchlist
+    waiver_order = {e["entry_id"]: e["waiver_pick"] for e in data["league"]["league_entries"]}
+    habits = rival_habits(data["transactions"], elements, entries, model.last_done)
+    pool_ids = [p["id"] for p in sorted(pool, key=lambda x: -x["xp_total"])[:60]]
+    rivals, survival = rival_claims(P, owners, pool_ids, entries, habits, cfg["entry_id"], waiver_order)
+    claim_ev = None
+    main_ins = {m["in"] for m in moves}
+    for m in moves:   # a player who is already a main claim can't also be a backup
+        m["backups"] = [b for b in m["backups"] if b["id"] not in main_ins]
+    if moves:
+        rival_lists = {e: r["targets"] for e, r in rivals.items()}
+        claim_ev, moves, probs = best_claim_order(moves, rival_lists, cfg["entry_id"], waiver_order, habits)
+        for m in moves:
+            m["p_land"] = round(probs[(m["in"], m["out"])], 2)
+            m["threats"] = survival.get(m["in"], {}).get("threats", [])
+            for b in m["backups"]:
+                b["p_land"] = round(probs[(b["id"], m["out"])], 2)
+        claim_ev = round(claim_ev, 1)
+    trades = suggest_trades(P, owners, entries, cfg["entry_id"], locked, thr)
+    exclude = {m["in"] for m in moves} | {b["id"] for m in moves for b in m["backups"]}
+    watch = watchlist(model, P, [p["id"] for p in pool], data["transactions"], entries, model.last_done,
+                      cfg["entry_id"], exclude)
+
     attackers = [p for p in pool if p["pos"] in ("MID", "FWD") and p["p_start_next"] >= 0.5]
     short_c = max(attackers, key=lambda x: x["ceiling"], default=None)
     steady = [p for p in pool if p["security"] >= 0.75]
@@ -240,6 +219,7 @@ def main():
     for pick in (short, medium):
         if pick:
             pick["meets_threshold"] = pick["gain"] >= thr
+            pick["threats"] = survival.get(pick["in"], {}).get("threats", [])
 
     # projected XI after recommended moves
     after = [p for p in squad if p["id"] not in {m["out"] for m in moves}] + [P[m["in"]] for m in moves]
@@ -253,6 +233,7 @@ def main():
         "speech": chief_speech(verdict, moves, short, medium, P, thr, len(horizon)),
         "xi_now": xi_now, "xi_after": xi_after,
         "flags": model.gw_flags(),
+        "trades": trades, "watchlist": watch, "claims_expected_gain": claim_ev,
         "squad_xp": round(sum(p["xp_total"] for p in squad), 1),
     }
 
@@ -278,6 +259,7 @@ def main():
         scouts.append({
             "club": t["short_name"], "club_name": t["name"], "label": f"The {label} Junior Scout",
             "outlook": model.team_outlook(tid),
+            "new_manager": tid in model.new_mgr,
             "attack": round(model.att[tid], 2), "defence": round(model.dfn[tid], 2),
             "top": top, "available": avail, "mine": mine,
             "set_pieces": {k: [p["name"] for p in sorted([x for x in players if x["set_pieces"][k]],
@@ -294,7 +276,8 @@ def main():
         le = le_by_id[s["league_entry"]]
         standings.append({"rank": s["rank"], "team": le["entry_name"], "manager": le["player_first_name"],
                           "total": s["total"], "gw": s["event_total"], "waiver": le["waiver_pick"],
-                          "me": le["entry_id"] == cfg["entry_id"]})
+                          "me": le["entry_id"] == cfg["entry_id"], "entry_id": le["entry_id"],
+                          "habits": habits.get(le["entry_id"]), "likely_claims": rivals.get(le["entry_id"], {}).get("likely_claims", [])})
 
     keep = set(p["id"] for p in squad) | set(p["id"] for p in sorted(pool, key=lambda x: -x["xp_total"])[:60])
     for s in scouts:
@@ -304,6 +287,19 @@ def main():
     for pick in (short, medium):
         if pick:
             keep |= {pick["in"], pick["out"]}
+    for t in trades:
+        keep |= {t["give"], t["get"]}
+    keep |= {w["id"] for w in watch}
+    for r in rivals.values():
+        keep |= {c["id"] for c in r["likely_claims"]}
+    keep = {k for k in keep if k in P}
+    for pid in keep:   # Monte Carlo range for every player shown
+        P[pid]["range"] = model.simulate(pid, model.fixture_components(pid), n=2000)
+        P[pid]["survival"] = survival.get(pid, {}).get("p")
+    try:
+        accuracy = json.load(open(os.path.join(ROOT, "history", "backtest.json")))
+    except (OSError, ValueError):
+        accuracy = None
 
     ev = model.events.get(next_gw, {})
     report = {
@@ -314,6 +310,7 @@ def main():
             "team_name": cfg["team_name"], "entry_id": cfg["entry_id"], "league": data["league"]["league"]["name"],
             "odds_fixtures": sum(1 for f in model.fix.values() if f["src"] == "odds"),
             "intel_clubs": len(intel_claims),
+            "european_matches": cfg.get("european_matches", []), "new_managers": cfg.get("new_managers", []),
             "sources": [
                 {"name": "FPL Draft API", "url": DRAFT_URL, "use": "players, ownership, live stats, league"},
                 {"name": "FPL classic API", "url": FPL_URL, "use": "set-piece order, injury news, scout risks, fixtures"},
@@ -327,11 +324,14 @@ def main():
         "scouts": scouts,
         "players": {str(pid): P[pid] for pid in keep},
         "track": score_history(model, cfg, names, owners),
+        "accuracy": accuracy,
+        "sources_reliability": sources,
+        "model_params": model.P,
     }
     os.makedirs(os.path.join(ROOT, "web", "data"), exist_ok=True)
     with open(os.path.join(ROOT, "web", "data", "report.json"), "w") as f:
         json.dump(report, f, separators=(",", ":"))
-    write_history(cfg, next_gw, chief)
+    write_history(cfg, next_gw, chief, decisions)
     print(f"GW{next_gw} verdict: {verdict}")
     for line in chief["speech"]:
         print(" -", line)
