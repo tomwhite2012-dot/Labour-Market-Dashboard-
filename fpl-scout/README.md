@@ -28,7 +28,7 @@ environment variable is set (sign up at https://the-odds-api.com/#get-access). E
 | `pipeline/backtest.py` | Replays past gameweeks to measure accuracy; `--tune` grid-searches the model settings into `config.json` |
 | `pipeline/should_run.py` | Tells the scheduled run whether to do a FULL run, a LATE news check, or nothing |
 | `pipeline/build.py` | Inlines the data into `web/index.html` and `dist/scout.html` |
-| `web/app.html` | The interface: pitch, animated cartoon scouts, report tabs |
+| `web/app.html` | The interface: pitch, animated painted-portrait scouts (they blink, glance and talk), report tabs |
 | `intel/gw<N>/<CLUB>.json` | Junior scout field intel (see below) |
 | `history/gw<N>.json` | Each week's advice, scored later for the track record |
 
