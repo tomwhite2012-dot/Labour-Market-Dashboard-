@@ -1,6 +1,6 @@
 {
  "club": "ARS",
- "generated": "2026-11-19T17:20Z",
+ "generated": "2026-11-19T17:35Z",
  "summary": "Calafiori and Rice are both in the predicted XI at St James' Park. Saka is injured and Max Dowman is suspended. Zubimendi is a doubt with a hamstring problem from Spain duty, which would only make Rice more central.",
  "claims": [
   {
@@ -27,6 +27,24 @@
    "text": "Injured; Max Dowman suspended.",
    "source_name": "NBC Sports, Newcastle vs Arsenal preview",
    "source_url": "https://www.nbcsports.com/soccer/news/how-to-watch-newcastle-vs-arsenal-live-stream-tv-team-news-prediction",
+   "date": "2026-11-19",
+   "tag": "rumour"
+  },
+  {
+   "player_id": 8,
+   "player": "Calafiori",
+   "text": "Predicted to start at left-back in the 5:30pm Saturday game at Newcastle; Arsenal reported to have come through the international break largely unscathed.",
+   "source_name": "Sports Mole, Newcastle vs Arsenal preview",
+   "source_url": "https://www.sportsmole.co.uk/football/arsenal/preview/newcastle-vs-arsenal-prediction-team-news-lineups_609363.html",
+   "date": "2026-11-19",
+   "tag": "rumour"
+  },
+  {
+   "player_id": 13,
+   "player": "Rice",
+   "text": "Described as ever-present and predicted to start in midfield alongside Guimaraes at Newcastle.",
+   "source_name": "Sports Mole, predicted Arsenal XI vs Newcastle",
+   "source_url": "https://www.sportsmole.co.uk/football/arsenal/predicted-lineups/konsa-or-saliba-havertz-or-gyokeres-predicted-arsenal-xi-vs-newcastle_609366.html",
    "date": "2026-11-19",
    "tag": "rumour"
   }

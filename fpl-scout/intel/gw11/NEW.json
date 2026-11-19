@@ -1,7 +1,7 @@
 {
  "club": "NEW",
- "generated": "2026-11-19T17:20Z",
- "summary": "Bad news for Wissa: the preview suggests Will Osula could start ahead of him after a run without goals. Joelinton is out. Horníček stays in goal, though Arsenal away is a tough clean-sheet test.",
+ "generated": "2026-11-19T17:35Z",
+ "summary": "Two previews now expect Wissa to be dropped against Arsenal, for Osula or Fernández-Pardo, after he failed to convince at Fulham. Horníček keeps his place in goal. Joelinton is out.",
  "claims": [
   {
    "player_id": 464,
@@ -24,6 +24,30 @@
    "text": "Unavailable, along with back-up keeper Ewen Jaouen.",
    "source_name": "NBC Sports, Newcastle vs Arsenal preview",
    "source_url": "https://www.nbcsports.com/soccer/news/how-to-watch-newcastle-vs-arsenal-live-stream-tv-team-news-prediction",
+   "date": "2026-11-19",
+   "tag": "rumour"
+  },
+  {
+   "player_id": 464,
+   "player": "Wissa",
+   "text": "Played at number 10 in the Fulham draw but failed to convince; Fernandez-Pardo is predicted to replace him for Saturday's home game with Arsenal.",
+   "source_name": "Sports Mole, predicted Newcastle XI vs Arsenal",
+   "source_url": "https://sportsmole.co.uk/football/newcastle-united/predicted-lineups/fernandez-pardo-or-wissa-predicted-newcastle-xi-vs-arsenal_609364.html",
+   "date": "2026-11-19",
+   "tag": "rumour",
+   "effect": {
+    "start_prob": 0.35,
+    "gameweeks": [
+     11
+    ]
+   }
+  },
+  {
+   "player_id": 566,
+   "player": "Horníček",
+   "text": "Expected to keep his place in goal, called Newcastle's saviour in the capital two weekends ago. Backup keeper Jaouen is out with a hamstring injury.",
+   "source_name": "Sports Mole, predicted Newcastle XI vs Arsenal",
+   "source_url": "https://sportsmole.co.uk/football/newcastle-united/predicted-lineups/fernandez-pardo-or-wissa-predicted-newcastle-xi-vs-arsenal_609364.html",
    "date": "2026-11-19",
    "tag": "rumour"
   }

@@ -1,6 +1,6 @@
 {
  "club": "TOT",
- "generated": "2026-11-19T17:20Z",
+ "generated": "2026-11-19T17:35Z",
  "summary": "Robertson has become the first-choice left-back and Tonali is a fixture in midfield. Bergvall, Dubravka and Tel are doubts. Ipswich at home is a kind fixture.",
  "claims": [
   {
@@ -18,6 +18,24 @@
    "text": "Expected to partner Mateus Fernandes in central midfield.",
    "source_name": "Sports Mole, Spurs vs Ipswich preview",
    "source_url": "https://www.sportsmole.co.uk/football/spurs/preview/spurs-vs-ipswich-prediction-team-news-lineups_609360.html",
+   "date": "2026-11-19",
+   "tag": "rumour"
+  },
+  {
+   "player_id": 455,
+   "player": "Tonali",
+   "text": "Predicted to start in the midfield pair with Fernandes vs Ipswich; no injury listed for him.",
+   "source_name": "The Stats Zone, Tottenham vs Ipswich preview",
+   "source_url": "https://www.thestatszone.com/tottenham-vs-ipswich-preview-team-news-prediction-240236",
+   "date": "2026-11-19",
+   "tag": "rumour"
+  },
+  {
+   "player_id": 502,
+   "player": "Robertson",
+   "text": "Predicted at left-back vs Ipswich; no injury listed for him.",
+   "source_name": "The Stats Zone, Tottenham vs Ipswich preview",
+   "source_url": "https://www.thestatszone.com/tottenham-vs-ipswich-preview-team-news-prediction-240236",
    "date": "2026-11-19",
    "tag": "rumour"
   }

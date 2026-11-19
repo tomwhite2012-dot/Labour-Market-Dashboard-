@@ -1,7 +1,7 @@
 {
  "club": "LIV",
- "generated": "2026-11-19T17:20Z",
- "summary": "Szoboszlai is fit. The Hungary manager said so on record, and he trained on Thursday. Gakpo is predicted on the right of the front three. Gravenberch is a doubt, which keeps Mac Allister in the middle.",
+ "generated": "2026-11-19T17:35Z",
+ "summary": "Szoboszlai looks fit: an 18 Nov preview flagged a knee sprain, but the Hungary manager said on 19 Nov he saw no problem, and he trained on Thursday. Gakpo and Mac Allister are projected to start. Gravenberch is a doubt. Slot's Friday press conference will confirm.",
  "claims": [
   {
    "player_id": 368,
@@ -52,6 +52,33 @@
      13
     ]
    }
+  },
+  {
+   "player_id": 368,
+   "player": "Szoboszlai",
+   "text": "Listed as a doubt with a knee sprain, though reported to have played for Hungary. Projected in the midfield pivot; named as a corner, free-kick and penalty taker (shared with Isak on penalties).",
+   "source_name": "RotoWire, Liverpool vs Man United prediction and team news",
+   "source_url": "https://www.rotowire.com/soccer/article/liverpool-vs-man-united-prediction-predicted-lineups-team-news-147044",
+   "date": "2026-11-18",
+   "tag": "rumour"
+  },
+  {
+   "player_id": 367,
+   "player": "Gakpo",
+   "text": "Projected to start on the left of the attack in a 4-2-3-1 vs Man United; listed among corner and free-kick takers.",
+   "source_name": "RotoWire, Liverpool vs Man United prediction and team news",
+   "source_url": "https://www.rotowire.com/soccer/article/liverpool-vs-man-united-prediction-predicted-lineups-team-news-147044",
+   "date": "2026-11-18",
+   "tag": "rumour"
+  },
+  {
+   "player_id": 372,
+   "player": "Mac Allister",
+   "text": "Projected to partner Szoboszlai in midfield; scored at Palace on 8 Nov; listed among corner and free-kick takers.",
+   "source_name": "RotoWire, Liverpool vs Man United prediction and team news",
+   "source_url": "https://www.rotowire.com/soccer/article/liverpool-vs-man-united-prediction-predicted-lineups-team-news-147044",
+   "date": "2026-11-18",
+   "tag": "rumour"
   }
  ]
 }

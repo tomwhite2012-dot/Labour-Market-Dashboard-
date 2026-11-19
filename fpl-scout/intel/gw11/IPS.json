@@ -1,6 +1,6 @@
 {
  "club": "IPS",
- "generated": "2026-11-19T17:20Z",
+ "generated": "2026-11-19T17:35Z",
  "summary": "Enciso is Ipswich's most-used attacker and starts again. There are no fresh fitness worries, but Spurs away is a hard fixture.",
  "claims": [
   {
@@ -9,6 +9,24 @@
    "text": "In the predicted XI; Ipswich report no fresh fitness concerns. Two goals and two assists this season.",
    "source_name": "Sports Mole, Spurs vs Ipswich preview",
    "source_url": "https://www.sportsmole.co.uk/football/spurs/preview/spurs-vs-ipswich-prediction-team-news-lineups_609360.html",
+   "date": "2026-11-19",
+   "tag": "rumour"
+  },
+  {
+   "player_id": 591,
+   "player": "Enciso",
+   "text": "Predicted to start in the attacking midfield role at Tottenham; Ipswich squad reported fully fit with no injury or suspension concerns.",
+   "source_name": "The Stats Zone, Tottenham vs Ipswich preview",
+   "source_url": "https://www.thestatszone.com/tottenham-vs-ipswich-preview-team-news-prediction-240236",
+   "date": "2026-11-19",
+   "tag": "rumour"
+  },
+  {
+   "player_id": 619,
+   "player": "Palacios",
+   "text": "Predicted to start in the central midfield pair with Lukic at Tottenham; Ipswich squad reported fully fit.",
+   "source_name": "The Stats Zone, Tottenham vs Ipswich preview",
+   "source_url": "https://www.thestatszone.com/tottenham-vs-ipswich-preview-team-news-prediction-240236",
    "date": "2026-11-19",
    "tag": "rumour"
   }

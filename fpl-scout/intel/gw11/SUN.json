@@ -1,6 +1,16 @@
 {
  "club": "SUN",
- "generated": "2026-11-19T17:20Z",
- "summary": "I found no fresh team news for Villa away. Le Fée is still on penalties according to FPL's official set-piece list.",
- "claims": []
+ "generated": "2026-11-19T17:35Z",
+ "summary": "Le Bris confirmed at his 19 Nov press conference that Xhaka is out longer with a calf injury, which could free up midfield minutes. Le Fée isn't mentioned and stays on penalties per FPL's official list.",
+ "claims": [
+  {
+   "player_id": 542,
+   "player": "E.Le Fée",
+   "text": "Context only, Le Fée not named: Le Bris said at his 19 Nov press conference that Xhaka has a calf injury and will be out 'a little bit longer' with no return date, Brobbey a minor injury assessed weekly, and Ballard, Mundle and Diarra remain out. Alderete is back from suspension.",
+   "source_name": "Fantasy Football Scout, FPL GW11 team news Thursday live updates",
+   "source_url": "https://www.fantasyfootballscout.co.uk/2026/11/19/fpl-gameweek-11-team-news-thursdays-live-injury-updates-3",
+   "date": "2026-11-19",
+   "tag": "confirmed"
+  }
+ ]
 }
