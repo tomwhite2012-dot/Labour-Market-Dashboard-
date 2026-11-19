@@ -66,7 +66,9 @@ def fetch_all(entry_id, league_id, use_cache=False):
         # finished gameweeks never change, so always allow cache for them
         d["live"][gw] = get_json(f"{DRAFT}/event/{gw}/live", f"live_{gw}.json", use_cache=(gw < last_done) or use_cache)
     d["last_finished_gw"] = last_done
-    d["odds"] = fetch_odds(use_cache)
+    fd = fetch_odds(use_cache)
+    api, d["odds_api_status"] = fetch_odds_api(use_cache)
+    d["odds"] = fd + api      # later rows win, so The Odds API overrides football-data.co.uk
     return d
 
 
@@ -91,7 +93,71 @@ def fetch_odds(use_cache=False):
                 "h": float(r["AvgH"]), "d": float(r["AvgD"]), "a": float(r["AvgA"]),
                 "o25": float(r["Avg>2.5"]) if r.get("Avg>2.5") else None,
                 "u25": float(r["Avg<2.5"]) if r.get("Avg<2.5") else None,
+                "source": "football-data.co.uk",
             })
         except (KeyError, ValueError):
             continue
+    return rows
+
+
+ODDS_API = "https://api.the-odds-api.com/v4/sports/soccer_epl/odds"
+
+
+def fetch_odds_api(use_cache=False):
+    """Premier League match odds from The Odds API (free Starter plan), if ODDS_API_KEY is set.
+
+    One call per run: UK bookmakers, match result (h2h) and over/under goals (totals), which
+    costs 2 credits. Odds are averaged across bookmakers. The key is never written to disk or
+    printed. With --cache, the last saved response is reused and no credits are spent.
+    """
+    path = os.path.join(RAW, "odds_api.json")
+    key = os.environ.get("ODDS_API_KEY", "").strip()
+    status = {"enabled": bool(key), "remaining": None, "error": None}
+    events = None
+    if use_cache or not key:
+        if os.path.exists(path):
+            saved = json.load(open(path))
+            events, status["remaining"] = saved.get("events"), saved.get("remaining")
+            status["cached"] = True
+    if events is None and key:
+        url = f"{ODDS_API}?regions=uk&markets=h2h,totals&oddsFormat=decimal&apiKey={key}"
+        try:
+            req = urllib.request.Request(url, headers=UA)
+            with urllib.request.urlopen(req, timeout=30) as r:
+                events = json.loads(r.read())
+                status["remaining"] = r.headers.get("x-requests-remaining")
+            os.makedirs(RAW, exist_ok=True)
+            json.dump({"events": events, "remaining": status["remaining"]}, open(path, "w"))
+        except Exception as e:  # never include the URL: it carries the key
+            code = getattr(e, "code", None)
+            status["error"] = f"HTTP {code}" if code else type(e).__name__
+            return [], status
+    return parse_odds_api(events or []), status
+
+
+def parse_odds_api(events, now=None):
+    from datetime import datetime, timezone
+    now = now or datetime.now(timezone.utc)
+    rows = []
+    for ev in events:
+        ct = ev.get("commence_time")
+        if ct and datetime.fromisoformat(ct.replace("Z", "+00:00")) < now:
+            continue   # already kicked off: stale
+        home, away = ev.get("home_team"), ev.get("away_team")
+        h, d, a, over, under = [], [], [], [], []
+        for bk in ev.get("bookmakers", []):
+            for m in bk.get("markets", []):
+                if m.get("key") == "h2h":
+                    for o in m.get("outcomes", []):
+                        (h if o["name"] == home else a if o["name"] == away else d).append(o["price"])
+                elif m.get("key") == "totals":
+                    for o in m.get("outcomes", []):
+                        if abs(float(o.get("point", 0)) - 2.5) < 1e-6:
+                            (over if o["name"] == "Over" else under).append(o["price"])
+        if h and d and a:
+            avg = lambda xs: sum(xs) / len(xs)
+            rows.append({"date": (ev.get("commence_time") or "")[:10], "home": home, "away": away,
+                         "h": avg(h), "d": avg(d), "a": avg(a),
+                         "o25": avg(over) if over else None, "u25": avg(under) if under else None,
+                         "source": "The Odds API", "books": len(ev.get("bookmakers", []))})
     return rows

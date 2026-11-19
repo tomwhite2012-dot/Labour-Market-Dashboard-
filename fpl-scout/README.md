@@ -11,7 +11,9 @@ python3 pipeline/build.py      # bundle the interface with the data
 open web/index.html            # or publish dist/scout.html
 ```
 
-No third-party Python packages and no paid APIs.
+No paid APIs. Bookmaker match odds come from The Odds API's free Starter plan when an `ODDS_API_KEY`
+environment variable is set (sign up at https://the-odds-api.com/#get-access). Each run uses about 2 credits of the
+500 a month. Without the key, odds fall back to football-data.co.uk, then to the xG model.
 
 ## What's in here
 

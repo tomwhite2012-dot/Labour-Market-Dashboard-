@@ -528,7 +528,8 @@ function chiefReport(inDrawer) {
     <div class="sub">Double and blank gameweeks</div><ul class="plain">${flags}</ul>
     <div class="sub">How sure is this?</div>
     <ul class="plain">
-      <li>Bookmaker odds used for <b>${R.meta.odds_fixtures}</b> of the next fixtures. ${R.meta.odds_fixtures ? "" : "Odds for this round aren't published yet, so team goal expectancy comes from season xG and goals."}</li>
+      <li>Bookmaker odds used for <b>${R.meta.odds_fixtures}</b> of the next fixtures${R.meta.odds_sources && R.meta.odds_sources.length ? ` (${R.meta.odds_sources.map(esc).join(", ")})` : ""}. ${R.meta.odds_fixtures ? "" : "Odds for this round aren't published yet, so team goal expectancy comes from season xG and goals."}
+        ${R.meta.odds_api && R.meta.odds_api.enabled ? (R.meta.odds_api.error ? ` The Odds API failed (${esc(R.meta.odds_api.error)}).` : (R.meta.odds_api.remaining != null ? ` The Odds API credits left this month: ${esc(R.meta.odds_api.remaining)}.` : "")) : " The Odds API isn't connected yet: add ODDS_API_KEY to the environment."}</li>
       <li>Field intel received from <b>${R.meta.intel_clubs}</b> of 20 junior scouts.</li>
       <li>Data refreshed ${fmtDate(R.meta.generated, { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })} UK time.</li>
     </ul>`;

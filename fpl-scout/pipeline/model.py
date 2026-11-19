@@ -44,6 +44,10 @@ FD_ALIASES = {
     "nottingham forest": "NFO", "tottenham": "TOT", "spurs": "TOT", "coventry": "COV",
     "hull": "HUL", "ipswich": "IPS", "leeds": "LEE", "wolves": "WOL", "newcastle": "NEW",
     "brighton": "BHA", "west ham": "WHU", "sheffield united": "SHU", "sunderland": "SUN",
+    "manchester united": "MUN", "manchester city": "MCI", "tottenham hotspur": "TOT",
+    "afc bournemouth": "BOU", "bournemouth": "BOU", "wolverhampton wanderers": "WOL",
+    "brighton and hove albion": "BHA", "west ham united": "WHU", "newcastle united": "NEW",
+    "leeds united": "LEE", "ipswich town": "IPS", "hull city": "HUL", "coventry city": "COV",
 }
 
 
@@ -236,6 +240,7 @@ class Model:
             lh = self.avg * self.att[h] * self.dfn[a] * self.P["home_adv"]
             la = self.avg * self.att[a] * self.dfn[h] * self.P["away_adv"]
             src = "model"
+            fx_odds_source = None
             o = odds_idx.get((h, a))
             if o and gw in self.horizon:
                 inv = [1 / o["h"], 1 / o["d"], 1 / o["a"]]
@@ -247,8 +252,9 @@ class Model:
                 oh, oa = fit_lambdas(inv[0] / s, inv[1] / s, inv[2] / s, po)
                 lh, la = 0.7 * oh + 0.3 * lh, 0.7 * oa + 0.3 * la
                 src = "odds"
+                fx_odds_source = o.get("source")
             ko = f.get("kickoff_time")
-            fx = {"id": f["id"], "gw": gw, "h": h, "a": a, "lh": lh, "la": la, "src": src,
+            fx = {"id": f["id"], "gw": gw, "h": h, "a": a, "lh": lh, "la": la, "src": src, "odds_source": fx_odds_source,
                   "kickoff": ko, "fdr_h": f.get("team_h_difficulty"), "fdr_a": f.get("team_a_difficulty")}
             self.fix[f["id"]] = fx
             self.team_fix[(gw, h)].append(fx)
