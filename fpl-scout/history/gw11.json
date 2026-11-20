@@ -1,6 +1,6 @@
 {
  "gw": 11,
- "generated": "2026-11-19T17:43+00:00",
+ "generated": "2026-11-20T08:46+00:00",
  "horizon": [
   11,
   12,
@@ -91,6 +91,28 @@
  },
  "intel_effects": [
   {
+   "player_id": 69,
+   "effect": "start_prob",
+   "value": 0.4,
+   "weight": 1.0,
+   "basis": "confirmed",
+   "domains": [
+    "premierleaguenewsnow.com"
+   ],
+   "ignored": 0
+  },
+  {
+   "player_id": 69,
+   "effect": "avail",
+   "value": 1.0,
+   "weight": 1.0,
+   "basis": "confirmed",
+   "domains": [
+    "premierleaguenewsnow.com"
+   ],
+   "ignored": 0
+  },
+  {
    "player_id": 368,
    "effect": "avail",
    "value": 1.0,
@@ -149,10 +171,11 @@
   {
    "player_id": 165,
    "effect": "avail",
-   "value": 0.5,
-   "weight": 0.25,
-   "basis": "single rumour",
+   "value": 0.2333333333333333,
+   "weight": 0.75,
+   "basis": "2 independent sources",
    "domains": [
+    "3addedminutes.com",
     "thechelseachronicle.com"
    ],
    "ignored": 0

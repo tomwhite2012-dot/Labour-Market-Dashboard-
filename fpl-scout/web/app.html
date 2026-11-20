@@ -632,6 +632,10 @@ function chiefReport(inDrawer) {
     <div class="card verdict-card"><div class="vbadge ${v}">${c.verdict}</div>
       <div><b>${esc(c.speech[0])}</b><div class="muted" style="font-size:13px">Rule: only swap when the new player beats the one you drop by at least +${c.threshold} expected points over GW${R.meta.horizon[0]}–${R.meta.horizon[H - 1]}. Locked players stay unless they face a long-term injury.</div></div></div>
     ${c.speech.length > 1 ? `<ul class="plain">${c.speech.slice(1).map(s => `<li>${esc(s)}</li>`).join("")}</ul>` : ""}
+    ${c.final_claims && c.final_claims.length ? `<div class="sub">Your final waiver list, in this order</div><div class="card">
+      ${c.final_claims.map((f, k) => `<div class="claim"><div class="meta"><b style="color:var(--ink)">${k + 1}. Claim ${esc(pl(f.in).name)}</b><span>drop ${esc(pl(f.out).name)}</span>
+        <span class="pill ${f.p_land >= 0.6 ? "good" : f.p_land >= 0.35 ? "warn" : "bad"}">${pct(f.p_land)} chance</span><span>${f.gain >= 0 ? "+" : ""}${f1(f.gain)} xP over ${H} GWs</span></div></div>`).join("")}
+      <p class="muted" style="font-size:13px;margin:6px 0 0">Claims 3 and 4 both drop ${esc(pl(c.final_claims[2].out).name)}: if ${esc(pl(c.final_claims[2].in).name)} lands, claim 4 can't go through. Scott's 3-GW number undersells him because he's only just back from injury; he's the medium-term stash. Keep Wissa.</p></div>` : ""}
     ${c.moves.length ? `<div class="sub">Waiver claims, in priority order</div><div class="grid2">${c.moves.map((m, k) => moveCard(m, `Claim ${k + 1}`)).join("")}</div>
       <p class="muted" style="font-size:13px">You pick ${ordinal(myWaiver.waiver)} on waivers. ${ahead.length ? `${ahead.map(a => esc(a.team)).join(" and ")} pick${ahead.length === 1 ? "s" : ""} before you.` : "Nobody picks before you."}
       This order was chosen by simulating 3,000 waiver runs: each round, teams pick in waiver order, using what each rival needs and how often they claim. Expected gain from these claims: <b>+${f1(c.claims_expected_gain)} xP</b>. List the backups too.</p>` : ""}

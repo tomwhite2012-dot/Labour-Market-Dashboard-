@@ -202,6 +202,13 @@ def main():
             for b in m["backups"]:
                 b["p_land"] = round(probs[(b["id"], m["out"])], 2)
         claim_ev = round(claim_ev, 1)
+    final = None
+    if cfg.get("final_claims") and cfg.get("final_claims_gw") == next_gw:
+        from draft_intel import simulate_waivers
+        fc = [(c["in"], c["out"]) for c in cfg["final_claims"] if c["in"] in P and c["out"] in P]
+        rl = {e: r["targets"] for e, r in rivals.items()}
+        pr = simulate_waivers(rl, cfg["entry_id"], fc, waiver_order, habits)
+        final = [{"in": i, "out": o, "gain": round(P[i]["xp_total"] - P[o]["xp_total"], 2), "p_land": round(pr[(i, o)], 2)} for i, o in fc]
     trades = suggest_trades(P, owners, entries, cfg["entry_id"], locked, thr)
     exclude = {m["in"] for m in moves} | {b["id"] for m in moves for b in m["backups"]}
     watch = watchlist(model, P, [p["id"] for p in pool], data["transactions"], entries, model.last_done,
@@ -233,7 +240,7 @@ def main():
         "speech": chief_speech(verdict, moves, short, medium, P, thr, len(horizon)),
         "xi_now": xi_now, "xi_after": xi_after,
         "flags": model.gw_flags(),
-        "trades": trades, "watchlist": watch, "claims_expected_gain": claim_ev,
+        "trades": trades, "watchlist": watch, "claims_expected_gain": claim_ev, "final_claims": final,
         "squad_xp": round(sum(p["xp_total"] for p in squad), 1),
     }
 
@@ -289,6 +296,8 @@ def main():
             keep |= {pick["in"], pick["out"]}
     for t in trades:
         keep |= {t["give"], t["get"]}
+    for fcl in final or []:
+        keep |= {fcl["in"], fcl["out"]}
     keep |= {w["id"] for w in watch}
     for r in rivals.values():
         keep |= {c["id"] for c in r["likely_claims"]}

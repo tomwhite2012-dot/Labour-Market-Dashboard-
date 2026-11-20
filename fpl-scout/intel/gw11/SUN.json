@@ -1,7 +1,7 @@
 {
  "club": "SUN",
- "generated": "2026-11-19T17:35Z",
- "summary": "Le Bris confirmed at his 19 Nov press conference that Xhaka is out longer with a calf injury, which could free up midfield minutes. Le Fée isn't mentioned and stays on penalties per FPL's official list.",
+ "generated": "2026-11-20T08:55Z",
+ "summary": "Le Bris confirmed Xhaka and Brobbey miss Villa away; Le Fée starts and stays on penalties.",
  "claims": [
   {
    "player_id": 542,
@@ -10,6 +10,15 @@
    "source_name": "Fantasy Football Scout, FPL GW11 team news Thursday live updates",
    "source_url": "https://www.fantasyfootballscout.co.uk/2026/11/19/fpl-gameweek-11-team-news-thursdays-live-injury-updates-3",
    "date": "2026-11-19",
+   "tag": "confirmed"
+  },
+  {
+   "player_id": 542,
+   "player": "E.Le Fée",
+   "text": "Le Bris confirmed Xhaka (no return date) and Brobbey miss the Villa trip, leaving more of the creative load on Le Fée.",
+   "source_name": "Premier League News Now, Sunderland injury news",
+   "source_url": "https://premierleaguenewsnow.com/2026/11/20/sunderland-injury-news-xhaka-brobbey-aston-villa/",
+   "date": "2026-11-20",
    "tag": "confirmed"
   }
  ]

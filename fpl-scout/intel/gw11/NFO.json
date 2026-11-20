@@ -1,6 +1,6 @@
 {
  "club": "NFO",
- "generated": "2026-11-19T17:20Z",
+ "generated": "2026-11-20T08:55Z",
  "summary": "Murillo is in the predicted back three at Bournemouth and has no injury news. Domínguez is unlikely to play.",
  "claims": [
   {
@@ -11,6 +11,15 @@
    "source_url": "https://www.freetips.com/football/english-premier-league/bournemouth-vs-nottingham-forest-betting-tips-20261119-0004/",
    "date": "2026-11-19",
    "tag": "rumour"
+  },
+  {
+   "player_id": null,
+   "player": "Domínguez",
+   "text": "Glasner: Domínguez out for weeks after a training setback; Schlager a doubt; Diomande and Sangare assessed after travel disruption. No concern raised about Murillo.",
+   "source_name": "AOL, Glasner team news",
+   "source_url": "https://www.aol.co.uk/articles/glasner-team-news-100th-game-170539000.html",
+   "date": "2026-11-19",
+   "tag": "confirmed"
   }
  ]
 }

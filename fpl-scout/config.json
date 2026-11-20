@@ -48,5 +48,24 @@
       "manager": "Thomas Frank",
       "source": "https://www.sportsmole.co.uk/football/coventry-city/relegation-battle/preview/coventry-vs-crystal-palace-prediction-team-news-lineups_609359.html"
     }
-  ]
+  ],
+  "final_claims": [
+    {
+      "in": 542,
+      "out": 123
+    },
+    {
+      "in": 472,
+      "out": 36
+    },
+    {
+      "in": 455,
+      "out": 157
+    },
+    {
+      "in": 69,
+      "out": 157
+    }
+  ],
+  "final_claims_gw": 11
 }

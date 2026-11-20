@@ -1,6 +1,6 @@
 {
  "club": "CHE",
- "generated": "2026-11-19T17:20Z",
+ "generated": "2026-11-20T08:55Z",
  "summary": "João Pedro might make the Leeds game, but nothing is guaranteed after three missed league matches; treat him as a doubt. I found no current news on Estêvão. The only injury stories were from April.",
  "claims": [
   {
@@ -17,6 +17,21 @@
      11,
      12,
      13
+    ]
+   }
+  },
+  {
+   "player_id": 165,
+   "player": "João Pedro",
+   "text": "Back in training after his thigh injury, but likely to miss the Leeds game.",
+   "source_name": "3 Added Minutes, GW11 injury news",
+   "source_url": "https://www.3addedminutes.com/sport/football/chelsea-fc/joao-pedro-van-dijk-saliba-and-more-fpl-injury-news-for-gameweek-11-9361864",
+   "date": "2026-11-20",
+   "tag": "rumour",
+   "effect": {
+    "avail": 0.1,
+    "gameweeks": [
+     11
     ]
    }
   }

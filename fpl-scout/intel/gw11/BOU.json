@@ -1,0 +1,25 @@
+{
+ "club": "BOU",
+ "claims": [
+  {
+   "player_id": 69,
+   "player": "Scott",
+   "text": "Marco Rose says Alex Scott will start at least one of Bournemouth's next three games as he returns from his thigh injury.",
+   "source_name": "Premier League News Now, Bournemouth injury news",
+   "source_url": "https://premierleaguenewsnow.com/2026/11/20/bournemouth-injury-news-nottingham-forest-alex-scott/",
+   "date": "2026-11-20",
+   "tag": "confirmed",
+   "effect": {
+    "start_prob": 0.4,
+    "avail": 1.0,
+    "gameweeks": [
+     11,
+     12,
+     13
+    ]
+   }
+  }
+ ],
+ "summary": "Scott is back: Rose says he'll start at least one of the next three games. A medium-term stash, not a GW11 starter.",
+ "generated": "2026-11-20T08:55Z"
+}
