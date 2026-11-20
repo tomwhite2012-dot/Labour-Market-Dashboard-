@@ -19,7 +19,7 @@ environment variable is set (sign up at https://the-odds-api.com/#get-access). E
 
 | Path | What it does |
 | --- | --- |
-| `config.json` | Team and league IDs, locked players, the +2 xP swap rule, a 3-gameweek horizon |
+| `config.json` | Team and league IDs, soft-locked players, decision rules (`decision`), horizons, model settings |
 | `pipeline/fetch.py` | Downloads FPL Draft and classic FPL API data, plus football-data.co.uk match odds when published |
 | `pipeline/model.py` | Expected-points baseline: minutes, team goal expectancy, goals, assists, clean sheets, saves, bonus, defensive contributions |
 | `pipeline/report.py` | Chief verdict (HOLD/SWAP), waiver claims with backups, short-term and medium-term picks, junior scout reports, track record |
@@ -34,11 +34,24 @@ environment variable is set (sign up at https://the-odds-api.com/#get-access). E
 
 ## Rules the chief follows
 
-- **Swap only if** the claimed player beats the dropped player by **at least +2.0 xP** over the next 3 gameweeks.
-  Otherwise the verdict is **HOLD**.
-- **Locked players** (Calafiori, Matheus Nunes, Gakpo, Rice, Szoboszlai, João Pedro) are never dropped unless FPL
-  news shows a long-term absence (unknown return date, or expected back more than 4 weeks out).
-- Claims are listed in priority order, with backups in case a team higher on waiver priority takes the first choice.
+These rules were set after replaying GW4–10 (see `pipeline/backtest.py`):
+
+- **Gains are adjusted.** The model's predicted gaps run about 20% large: a predicted 6.4 xP gap came out at
+  4.9 in reality. So gains are shrunk by 20% (`decision.gain_shrink`).
+- **The bar depends on what you'd lose.** Claiming doesn't cost waiver priority, which is set by league position.
+  The real cost is a rival picking up the player you drop.
+  - **+1.5 xP** (adjusted, over 3 GWs) when no rival is likely to claim the dropped player.
+  - **+2.5 xP** when one would: he'd be a top-3 free agent in his position, or he's a proven scorer worth
+    stashing while injured.
+  - Otherwise the verdict is **HOLD**.
+- **Soft locks.** Locked players (Calafiori, Matheus Nunes, Gakpo, Rice, Szoboszlai, João Pedro) are dropped only
+  for an adjusted gain of **+4 xP** or more. Your judgement holds unless the evidence is overwhelming.
+- **Horizon.** Decisions use the next 3 gameweeks. Replays found almost no difference between 1, 3 and 5. A
+  weighted 5-gameweek view (weights 1, .85, .7, .6, .5) breaks near-ties and helps with stashes.
+- **Second opinion.** FPL's own expected points are shown beside ours, and each claim says whether FPL's model
+  agrees.
+- Claims are listed in the order a simulation of the waiver rounds says gives the most expected gain, with
+  backups.
 - Double and blank gameweeks are flagged for the next 10 gameweeks.
 
 ## Junior scout intel format

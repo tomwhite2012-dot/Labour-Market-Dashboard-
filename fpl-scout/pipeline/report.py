@@ -15,7 +15,7 @@ import sys
 from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from draft_intel import best_claim_order, best_xi, rival_claims, rival_habits, suggest_trades, watchlist  # noqa: E402
+from draft_intel import best_claim_order, best_xi, drop_demand, rival_claims, rival_habits, suggest_trades, watchlist  # noqa: E402
 from fetch import ROOT, fetch_all  # noqa: E402
 from intel import load_intel, score_sources  # noqa: E402
 from model import Model  # noqa: E402
@@ -31,42 +31,80 @@ def load_cfg():
 
 
 # ---------------------------------------------------------------- moves
-def plan_moves(squad, pool, locked, threshold, max_moves=3):
-    outs = [p for p in squad if p["id"] not in locked]
+def fpl_verdict(i, o):
+    """Does FPL's own expected-points model agree that `i` beats `o` next gameweek?"""
+    a, b = i.get("fpl_ep"), o.get("fpl_ep")
+    if a is None or b is None:
+        return None
+    return "agrees" if a > b + 0.3 else ("disagrees" if a < b - 0.3 else "neutral")
+
+
+def swap_bar(o, dec, demand, locked):
+    """The adjusted xP gain needed to drop player `o`, and why."""
+    if o["id"] in locked:
+        return dec["soft_lock_gap"], f"soft lock: only dropped for a big upgrade"
+    dm = demand.get(o["id"], {"p": 0, "why": ""})
+    if dm["p"] >= dec["demand_cutoff"]:
+        return dec["bar_high_demand"], f"rivals would likely claim {o['name']} ({dm['why']})"
+    return dec["bar_low_demand"], f"no rival is likely to want {o['name']} ({dm['why']})"
+
+
+def make_move(i, o, dec, bar, why, locked):
+    shrink = dec["gain_shrink"]
+    return {"in": i["id"], "out": o["id"],
+            "gain": round((i["xp_total"] - o["xp_total"]) * shrink, 2),
+            "gain_raw": round(i["xp_total"] - o["xp_total"], 2),
+            "gain_view": round((i["xp_view"] - o["xp_view"]) * shrink, 2),
+            "gain_next": round((i["xp_next"] - o["xp_next"]) * shrink, 2),
+            "bar": bar, "bar_reason": why, "soft_lock": o["id"] in locked,
+            "fpl": fpl_verdict(i, o)}
+
+
+def plan_moves(squad, pool, locked, dec, demand, max_moves=5):
+    """Greedy best swaps. Gains are shrunk to match how the model's gaps play out in reality;
+    each swap must clear a bar that depends on what you'd lose; the weighted 5-gameweek view
+    breaks near-ties (within 0.5 xP)."""
+    shrink = dec["gain_shrink"]
     pool = [p for p in pool if p["status"] != "u"]
     moves, used_in, used_out = [], set(), set()
     while len(moves) < max_moves:
         best = None
-        for o in outs:
+        for o in squad:
             if o["id"] in used_out:
                 continue
+            bar, why = swap_bar(o, dec, demand, locked)
             for i in pool:
                 if i["pos"] != o["pos"] or i["id"] in used_in:
                     continue
-                gain = i["xp_total"] - o["xp_total"]
-                if best is None or gain > best[0]:
-                    best = (gain, i, o)
-        if not best or best[0] < threshold:
+                adj = (i["xp_total"] - o["xp_total"]) * shrink
+                if adj < bar:
+                    continue
+                key = (round(adj * 2), (i["xp_view"] - o["xp_view"]) * shrink)
+                if best is None or key > best[0]:
+                    best = (key, i, o, bar, why)
+        if not best:
             break
-        gain, i, o = best
-        backups = [b for b in sorted(pool, key=lambda x: -x["xp_total"])
-                   if b["pos"] == o["pos"] and b["id"] not in used_in and b["id"] != i["id"]
-                   and b["xp_total"] - o["xp_total"] >= threshold][:2]
-        moves.append({"in": i["id"], "out": o["id"], "gain": round(gain, 2),
-                      "gain_next": round(i["xp_next"] - o["xp_next"], 2),
-                      "backups": [{"id": b["id"], "gain": round(b["xp_total"] - o["xp_total"], 2)} for b in backups]})
+        _, i, o, bar, why = best
+        mv = make_move(i, o, dec, bar, why, locked)
+        backups = sorted((b for b in pool if b["pos"] == o["pos"] and b["id"] not in used_in and b["id"] != i["id"]
+                          and (b["xp_total"] - o["xp_total"]) * shrink >= bar),
+                         key=lambda b: -b["xp_total"])[:2]
+        mv["backups"] = [{"id": b["id"], "gain": round((b["xp_total"] - o["xp_total"]) * shrink, 2)} for b in backups]
+        moves.append(mv)
         used_in.add(i["id"])
         used_out.add(o["id"])
     return moves
 
 
-def pick_vs_squad(cand, squad, locked):
+def pick_vs_squad(cand, squad, locked, dec, demand):
     same = [p for p in squad if p["pos"] == cand["pos"] and p["id"] not in locked]
     if not same:
         return None
     worst = min(same, key=lambda x: x["xp_total"])
-    return {"in": cand["id"], "out": worst["id"], "gain": round(cand["xp_total"] - worst["xp_total"], 2),
-            "gain_next": round(cand["xp_next"] - worst["xp_next"], 2)}
+    bar, why = swap_bar(worst, dec, demand, locked)
+    mv = make_move(cand, worst, dec, bar, why, locked)
+    mv["meets_threshold"] = mv["gain"] >= bar
+    return mv
 
 
 # ---------------------------------------------------------------- track record
@@ -114,16 +152,19 @@ def score_history(model, cfg, names, owners):
 
 
 # ---------------------------------------------------------------- narrative
-def chief_speech(verdict, moves, short, medium, P, threshold, horizon_n):
+def chief_speech(verdict, moves, short, medium, P, dec, horizon_n):
     lines = []
     if verdict == "HOLD":
-        lines.append(f"Hold your nerve this week. Nobody on waivers beats a player you can drop by {threshold:g}+ expected points over the next {horizon_n} gameweeks.")
+        lines.append(f"Hold your nerve this week. No free agent clears the bar for any of your players "
+                     f"(+{dec['bar_low_demand']:g} xP, or +{dec['bar_high_demand']:g} where rivals would grab who you drop) over the next {horizon_n} gameweeks.")
     else:
         n = len(moves)
         lines.append(f"Make {'a move' if n == 1 else f'{n} moves'} this week.")
         for m in moves:
             land = f", about {int(round(m['p_land'] * 100))}% chance he reaches you" if m.get("p_land") is not None else ""
-            lines.append(f"Bring in {P[m['in']]['name']} for {P[m['out']]['name']}: +{m['gain']:.1f} xP over {horizon_n} gameweeks{land}.")
+            fpl = {"agrees": " FPL's own model agrees.", "disagrees": " FPL's own model disagrees.", "neutral": ""}.get(m.get("fpl"), "")
+            lock = " (overrides your soft lock)" if m.get("soft_lock") else ""
+            lines.append(f"Bring in {P[m['in']]['name']} for {P[m['out']]['name']}{lock}: +{m['gain']:.1f} xP over {horizon_n} gameweeks{land}.{fpl}")
     in_moves = {m["in"] for m in moves}
     if short:
         s = P[short["in"]]
@@ -175,18 +216,21 @@ def main():
     pool = [p for p in P.values() if p["owner"] is None]
     locked = set()
     for p in squad:
-        p["locked"] = p["name"] in cfg["locks"] and not p["long_term_out"]
-        p["lock_released"] = p["name"] in cfg["locks"] and p["long_term_out"]
+        p["locked"] = p["name"] in cfg["locks"]          # soft lock: needs a big gain to drop
+        p["lock_released"] = False
         if p["locked"]:
             locked.add(p["id"])
 
-    thr = cfg["swap_threshold_xp"]
-    moves = plan_moves(squad, pool, locked, thr)
+    dec = cfg["decision"]
+    waiver_order = {e["entry_id"]: e["waiver_pick"] for e in data["league"]["league_entries"]}
+    habits = rival_habits(data["transactions"], elements, entries, model.last_done)
+    demand = drop_demand(P, owners, entries, habits, cfg["entry_id"], model.last_done)
+    for p in squad:
+        p["drop_demand"] = demand.get(p["id"])
+    moves = plan_moves(squad, pool, locked, dec, demand)
     verdict = "SWAP" if moves else "HOLD"
 
     # draft intelligence: rivals' likely claims, survival to your pick, trades, watchlist
-    waiver_order = {e["entry_id"]: e["waiver_pick"] for e in data["league"]["league_entries"]}
-    habits = rival_habits(data["transactions"], elements, entries, model.last_done)
     pool_ids = [p["id"] for p in sorted(pool, key=lambda x: -x["xp_total"])[:60]]
     rivals, survival = rival_claims(P, owners, pool_ids, entries, habits, cfg["entry_id"], waiver_order)
     claim_ev = None
@@ -208,8 +252,13 @@ def main():
         fc = [(c["in"], c["out"]) for c in cfg["final_claims"] if c["in"] in P and c["out"] in P]
         rl = {e: r["targets"] for e, r in rivals.items()}
         pr = simulate_waivers(rl, cfg["entry_id"], fc, waiver_order, habits)
-        final = [{"in": i, "out": o, "gain": round(P[i]["xp_total"] - P[o]["xp_total"], 2), "p_land": round(pr[(i, o)], 2)} for i, o in fc]
-    trades = suggest_trades(P, owners, entries, cfg["entry_id"], locked, thr)
+        final = []
+        for i, o in fc:
+            bar, why = swap_bar(P[o], dec, demand, locked)
+            mv = make_move(P[i], P[o], dec, bar, why, locked)
+            mv["p_land"] = round(pr[(i, o)], 2)
+            final.append(mv)
+    trades = suggest_trades(P, owners, entries, cfg["entry_id"], locked, dec["bar_high_demand"] / dec["gain_shrink"])
     exclude = {m["in"] for m in moves} | {b["id"] for m in moves for b in m["backups"]}
     watch = watchlist(model, P, [p["id"] for p in pool], data["transactions"], entries, model.last_done,
                       cfg["entry_id"], exclude)
@@ -221,11 +270,10 @@ def main():
     if medium_c and short_c and medium_c["id"] == short_c["id"]:
         steady = [p for p in steady if p["id"] != short_c["id"]]
         medium_c = max(steady, key=lambda x: x["xp_total"], default=None)
-    short = pick_vs_squad(short_c, squad, locked) if short_c else None
-    medium = pick_vs_squad(medium_c, squad, locked) if medium_c else None
+    short = pick_vs_squad(short_c, squad, locked, dec, demand) if short_c else None
+    medium = pick_vs_squad(medium_c, squad, locked, dec, demand) if medium_c else None
     for pick in (short, medium):
         if pick:
-            pick["meets_threshold"] = pick["gain"] >= thr
             pick["threats"] = survival.get(pick["in"], {}).get("threats", [])
 
     # projected XI after recommended moves
@@ -235,9 +283,9 @@ def main():
 
     horizon = model.horizon
     chief = {
-        "verdict": verdict, "horizon": horizon, "threshold": thr,
+        "verdict": verdict, "horizon": horizon, "rules": dec, "view": model.view, "view_weights": model.view_weights,
         "moves": moves, "short_term": short, "medium_term": medium,
-        "speech": chief_speech(verdict, moves, short, medium, P, thr, len(horizon)),
+        "speech": chief_speech(verdict, moves, short, medium, P, dec, len(horizon)),
         "xi_now": xi_now, "xi_after": xi_after,
         "flags": model.gw_flags(),
         "trades": trades, "watchlist": watch, "claims_expected_gain": claim_ev, "final_claims": final,

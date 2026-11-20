@@ -11,7 +11,6 @@
     "João Pedro"
   ],
   "lock_release_if_out_gameweeks": 4,
-  "swap_threshold_xp": 2.0,
   "horizon_gameweeks": 3,
   "dgw_lookahead_gameweeks": 10,
   "report_day": "Thursday 17:00 Europe/London",
@@ -67,5 +66,20 @@
       "out": 157
     }
   ],
-  "final_claims_gw": 11
+  "final_claims_gw": 11,
+  "decision": {
+    "gain_shrink": 0.8,
+    "bar_low_demand": 1.5,
+    "bar_high_demand": 2.5,
+    "demand_cutoff": 0.3,
+    "soft_lock_gap": 4.0
+  },
+  "view_gameweeks": 5,
+  "view_weights": [
+    1.0,
+    0.85,
+    0.7,
+    0.6,
+    0.5
+  ]
 }

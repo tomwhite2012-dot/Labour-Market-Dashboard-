@@ -150,6 +150,44 @@ def rival_claims(P, owners, pool_ids, entries, habits, my_entry, waiver_order):
     return rivals, survival
 
 
+def drop_demand(P, owners, entries, habits, my_entry, last_gw):
+    """Chance a rival would claim each of your players if you dropped him, and why.
+
+    Rivals only chase a dropped player who would be one of the best free agents in his position
+    (top 3 now), or a proven scorer who is injured and worth stashing. Interest also needs a rival
+    whose weakest player in that position he would clearly beat, scaled by how often they claim.
+    """
+    squads = defaultdict(list)
+    for pid, o in owners.items():
+        if o and pid in P:
+            squads[o].append(P[pid])
+    pool = [p for pid, p in P.items() if owners.get(pid) is None and p["status"] != "u"]
+    out = {}
+    for p in squads[my_entry]:
+        s = p["season"]
+        ppg = s["pts"] / max(1, last_gw)
+        proven_injured = p["status"] in ("i", "d") and s["starts"] >= 3 and ppg >= 4.0
+        value = max(p["xp_total"], ppg * 3 * 0.8) if proven_injured else p["xp_total"]
+        rank = sum(1 for q in pool if q["pos"] == p["pos"] and q["xp_total"] > value)
+        if rank < 3:
+            factor, why = 1.0, "would be a top free agent"
+        elif proven_injured:
+            factor, why = 0.6, "a proven scorer rivals could stash while injured"
+        elif rank < 6:
+            factor, why = 0.4, "would be a decent free agent"
+        else:
+            factor, why = 0.1, "plenty of better free agents"
+        miss = 1.0
+        for eid in entries:
+            if eid == my_entry:
+                continue
+            worst = min((q["xp_total"] for q in squads[eid] if q["pos"] == p["pos"]), default=0)
+            if value - worst > 1.0:
+                miss *= 1 - 0.6 * habits[eid]["p_active"]
+        out[p["id"]] = {"p": round((1 - miss) * factor, 2), "why": why}
+    return out
+
+
 # ---------------------------------------------------------------- trades
 def suggest_trades(P, owners, entries, my_entry, locked, threshold, limit=5):
     squads = defaultdict(list)

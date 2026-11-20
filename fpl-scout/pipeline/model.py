@@ -117,6 +117,9 @@ class Model:
         self.horizon = list(range(self.next_gw, min(self.next_gw + cfg["horizon_gameweeks"], 39)))
         if cutoff:
             self.horizon = [cutoff]
+        # longer weighted view used as a tiebreaker and for stash decisions
+        self.view = self.horizon if cutoff else list(range(self.next_gw, min(self.next_gw + cfg.get("view_gameweeks", 5), 39)))
+        self.view_weights = cfg.get("view_weights", [1.0, 0.85, 0.7, 0.6, 0.5])
         self.fixtures = data["fixtures"]
         self.euro = defaultdict(list)
         for m in cfg.get("european_matches", []):
@@ -394,7 +397,7 @@ class Model:
         r["p_dc"] = (hits + DC_PRIOR[pos] * 3) / (games + 3) if thr else 0
         return r
 
-    def fixture_components(self, pid, force_avail=False):
+    def fixture_components(self, pid, force_avail=False, gws=None):
         """Per gameweek, per fixture inputs to the points model (shared by xP and simulation)."""
         el = self.elements[pid]
         pos, team = el["element_type"], el["team"]
@@ -404,7 +407,7 @@ class Model:
         is_taker = ce.get("penalties_order") == 1
         eff = self.intel.get(pid, [])
         out = []
-        for k, gw in enumerate(self.horizon):
+        for k, gw in enumerate(gws or self.horizon):
             avail = 1.0 if force_avail else self.availability(el, k, gw)
             p_start_raw = prof["p_start"]
             mult, pen = 1.0, 0.0
@@ -506,9 +509,10 @@ class Model:
     def player(self, pid, sims=0):
         el = self.elements[pid]
         pos, team = el["element_type"], el["team"]
-        comps = self.fixture_components(pid)
+        comps_all = self.fixture_components(pid, gws=self.view)
+        comps = comps_all[:len(self.horizon)]
         gws = []
-        for g in comps:
+        for g in comps_all:
             row = {"gw": g["gw"], "fixtures": [], "xp": 0.0, "e_g": 0.0, "e_a": 0.0, "e_mins": 0.0,
                    "p_start": round(g["fixtures"][0]["p_start"], 2) if g["fixtures"] else 0.0}
             for c in g["fixtures"]:
@@ -522,6 +526,9 @@ class Model:
             for key in ("xp", "e_g", "e_a", "e_mins"):
                 row[key] = round(row[key], 2)
             gws.append(row)
+        view_xp = [g["xp"] for g in gws]
+        gws = gws[:len(self.horizon)]
+        xp_view = sum(w * x for w, x in zip(self.view_weights, view_xp))
         first = gws[0] if gws else {"xp": 0, "e_g": 0, "e_a": 0, "p_start": 0}
         egi = first["e_g"] + first["e_a"]
         if self.backtest:
@@ -541,6 +548,9 @@ class Model:
             "gws": gws,
             "xp_next": first["xp"],
             "xp_total": round(sum(g["xp"] for g in gws), 2),
+            "xp_view": round(xp_view, 2),
+            "xp_view_gws": [round(x, 2) for x in view_xp],
+            "fpl_ep": fnum(ce.get("ep_next"), None) if ce.get("ep_next") is not None else None,
             "p_start_next": first["p_start"],
             "p_return_next": round(1 - math.exp(-egi), 2),
             "p_haul_next": round(1 - math.exp(-egi) * (1 + egi), 2),

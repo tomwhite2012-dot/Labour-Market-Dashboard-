@@ -448,13 +448,15 @@ function playerTable(ids, opts = {}) {
   const gws = R.meta.horizon;
   const rows = ids.map(id => {
     const p = pl(id); if (!p) return "";
-    const lock = p.locked ? ' <span class="pill info" title="You will only drop this player for a long-term injury">Lock</span>' : (p.lock_released ? ' <span class="pill bad" title="Lock released: long-term absence">Lock off</span>' : "");
+    const lock = p.locked ? ` <span class="pill info" title="Soft lock: only dropped for an adjusted gain of +${R.chief.rules.soft_lock_gap} xP or more">Soft lock</span>` : "";
     const fx = p.gws.map(g => `<td class="r" title="${esc(g.fixtures.map(fixtureLabel).join(" + ") || "No fixture")}">${f1(g.xp)}</td>`).join("");
     return `<tr${p.owner === ME && opts.markMine ? ' class="me"' : ""}>
       <td class="name"><b>${esc(p.name)}</b>${statusPill(p)}${lock}<div class="muted" style="font-size:12px">${esc(p.team)} · ${p.pos}</div></td>
       ${opts.owner !== false ? `<td>${ownerPill(p)}</td>` : ""}
       ${fx}
       <td class="r"><b>${f1(p.xp_total)}</b><span class="xpbar" style="width:${Math.round(40 * p.xp_total / maxXp)}px"></span>${p.range ? `<div class="range" title="80% of simulated outcomes fall in this range">${p.range[0]}–${p.range[2]}</div>` : ""}</td>
+      <td class="r" title="Weighted ${R.chief.view.length}-gameweek view: nearer gameweeks count more">${f1(p.xp_view)}</td>
+      <td class="r" title="FPL's own expected points for next gameweek: an independent second opinion">${p.fpl_ep == null ? "–" : f1(p.fpl_ep)}</td>
       <td class="r">${pct(p.p_start_next)}</td>
       <td class="r">${Math.round(p.gws[0] ? p.gws[0].e_mins : 0)}</td>
       <td class="r">${pct(p.p_return_next)}</td>
@@ -467,6 +469,8 @@ function playerTable(ids, opts = {}) {
   return `<div class="tbl-wrap"><table>
     <thead><tr><th>Player</th>${opts.owner !== false ? "<th>Owner</th>" : ""}
       ${gws.map(g => `<th class="r">GW${g} xP</th>`).join("")}<th class="r" title="Expected points, with the 10th–90th percentile range of 2,000 simulations underneath">${gws.length}-GW xP</th>
+      <th class="r" title="Weighted ${R.chief.view.length}-gameweek view (GW${R.chief.view[0]}–${R.chief.view[R.chief.view.length - 1]}, weights ${R.chief.view_weights.join(", ")})">${R.chief.view.length}-GW view</th>
+      <th class="r" title="FPL's own expected points for GW${R.meta.next_gw}">FPL GW${R.meta.next_gw}</th>
       <th class="r" title="Chance of starting next gameweek">Start</th><th class="r" title="Expected minutes next gameweek">Mins</th>
       <th class="r" title="Chance of a goal or assist next gameweek">G/A</th><th>Set pieces</th><th class="r">Pts</th><th class="r">xG / xA</th>
       ${opts.news !== false ? "<th>News</th>" : ""}</tr></thead>
@@ -608,9 +612,10 @@ function moveCard(m, title, note) {
       <div class="arrow">→</div>
       <div class="side in"><small>Claim</small><div class="pname">${esc(i.name)}</div><div class="muted" style="font-size:13px">${i.team} · ${f1(i.xp_total)} xP</div></div>
     </div>
-    <div class="kv"><span>Gain over ${R.meta.horizon.length} GWs <span class="gain${neg}">${m.gain > 0 ? "+" : ""}${f1(m.gain)}</span></span><span>Next GW <b>${m.gain_next > 0 ? "+" : ""}${f1(m.gain_next)}</b></span>
+    <div class="kv"><span title="Adjusted: model gaps shrunk by ${Math.round((1 - R.chief.rules.gain_shrink) * 100)}% to match how they play out">Gain over ${R.meta.horizon.length} GWs <span class="gain${neg}">${m.gain > 0 ? "+" : ""}${f1(m.gain)}</span></span>${m.gain_view != null ? `<span>${R.chief.view.length}-GW view <b>${m.gain_view > 0 ? "+" : ""}${f1(m.gain_view)}</b></span>` : ""}<span>Next GW <b>${m.gain_next > 0 ? "+" : ""}${f1(m.gain_next)}</b></span>
       <span>Start <b>${pct(i.p_start_next)}</b></span><span>G/A chance <b>${pct(i.p_return_next)}</b></span><span>Set pieces ${setPieceChips(i)}</span></div>
-    ${m.meets_threshold === false ? `<div class="kv"><span class="pill plain">Below the +${R.chief.threshold} xP bar: watch, don't claim</span></div>` : ""}
+    <div class="kv">${fplBadge(m.fpl)}${m.soft_lock ? '<span class="pill warn">Overrides your soft lock</span>' : ""}${m.bar != null ? `<span>Bar +${m.bar}: ${esc(m.bar_reason || "")}</span>` : ""}</div>
+    ${m.meets_threshold === false ? `<div class="kv"><span class="pill plain">Below its +${m.bar} xP bar: watch, don't claim</span></div>` : ""}
     ${m.p_land != null ? `<div class="kv"><span class="pill ${m.p_land >= 0.6 ? "good" : m.p_land >= 0.35 ? "warn" : "bad"}">${pct(m.p_land)} chance he reaches you</span>${m.threats && m.threats.length ? `<span>Likely rivals: <b>${m.threats.map(esc).join(", ")}</b></span>` : ""}</div>` : (m.threats && m.threats.length ? `<div class="kv"><span>Rivals ahead who may want him: <b>${m.threats.map(esc).join(", ")}</b></span></div>` : "")}
     ${m.backups && m.backups.length ? `<div class="kv"><span>If taken first: ${m.backups.map(b => `<b>${esc(pl(b.id).name)}</b> (+${f1(b.gain)}${b.p_land != null ? `, ${pct(b.p_land)} as backup` : ""})`).join(", ")}</span></div>` : ""}
     ${note ? `<p class="muted" style="margin:8px 0 0;font-size:13px">${note}</p>` : ""}</div>`;
@@ -630,11 +635,11 @@ function chiefReport(inDrawer) {
     : `<li>No double or blank gameweeks in the published fixtures for the next ${10} gameweeks.</li>`;
   return `
     <div class="card verdict-card"><div class="vbadge ${v}">${c.verdict}</div>
-      <div><b>${esc(c.speech[0])}</b><div class="muted" style="font-size:13px">Rule: only swap when the new player beats the one you drop by at least +${c.threshold} expected points over GW${R.meta.horizon[0]}–${R.meta.horizon[H - 1]}. Locked players stay unless they face a long-term injury.</div></div></div>
+      <div><b>${esc(c.speech[0])}</b><div class="muted" style="font-size:13px">Rules: gains are expected points over GW${R.meta.horizon[0]}–${R.meta.horizon[H - 1]}, shrunk ${Math.round((1 - c.rules.gain_shrink) * 100)}% because the model's gaps run large. A swap must clear <b>+${c.rules.bar_low_demand}</b> when no rival would want the player you drop, <b>+${c.rules.bar_high_demand}</b> when one would, and <b>+${c.rules.soft_lock_gap}</b> for soft-locked players. Near-ties are settled by the weighted ${c.view.length}-gameweek view.</div></div></div>
     ${c.speech.length > 1 ? `<ul class="plain">${c.speech.slice(1).map(s => `<li>${esc(s)}</li>`).join("")}</ul>` : ""}
     ${c.final_claims && c.final_claims.length ? `<div class="sub">Your final waiver list, in this order</div><div class="card">
       ${c.final_claims.map((f, k) => `<div class="claim"><div class="meta"><b style="color:var(--ink)">${k + 1}. Claim ${esc(pl(f.in).name)}</b><span>drop ${esc(pl(f.out).name)}</span>
-        <span class="pill ${f.p_land >= 0.6 ? "good" : f.p_land >= 0.35 ? "warn" : "bad"}">${pct(f.p_land)} chance</span><span>${f.gain >= 0 ? "+" : ""}${f1(f.gain)} xP over ${H} GWs</span></div></div>`).join("")}
+        <span class="pill ${f.p_land >= 0.6 ? "good" : f.p_land >= 0.35 ? "warn" : "bad"}">${pct(f.p_land)} chance</span><span>${f.gain >= 0 ? "+" : ""}${f1(f.gain)} xP over ${H} GWs</span>${fplBadge(f.fpl)}</div></div>`).join("")}
       <p class="muted" style="font-size:13px;margin:6px 0 0">Claims 3 and 4 both drop ${esc(pl(c.final_claims[2].out).name)}: if ${esc(pl(c.final_claims[2].in).name)} lands, claim 4 can't go through. Scott's 3-GW number undersells him because he's only just back from injury; he's the medium-term stash. Keep Wissa.</p></div>` : ""}
     ${c.moves.length ? `<div class="sub">Waiver claims, in priority order</div><div class="grid2">${c.moves.map((m, k) => moveCard(m, `Claim ${k + 1}`)).join("")}</div>
       <p class="muted" style="font-size:13px">You pick ${ordinal(myWaiver.waiver)} on waivers. ${ahead.length ? `${ahead.map(a => esc(a.team)).join(" and ")} pick${ahead.length === 1 ? "s" : ""} before you.` : "Nobody picks before you."}
@@ -656,8 +661,14 @@ function chiefReport(inDrawer) {
       <li>Data refreshed ${fmtDate(R.meta.generated, { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })} UK time.</li>
     </ul>`;
 }
+function fplBadge(v) {
+  if (v === "agrees") return '<span class="pill good" title="FPL\'s own expected points also favour this swap next gameweek">FPL\'s model agrees</span>';
+  if (v === "disagrees") return '<span class="pill bad" title="FPL\'s own expected points favour the player you would drop next gameweek">FPL\'s model disagrees</span>';
+  if (v === "neutral") return '<span class="pill plain">FPL\'s model: too close to call</span>';
+  return "";
+}
 function tradesBlock(trades) {
-  if (!trades || !trades.length) return `<div class="empty">No 1-for-1 trade gains you +${R.chief.threshold} xP without leaving the other manager worse off.</div>`;
+  if (!trades || !trades.length) return `<div class="empty">No 1-for-1 trade gains you +${R.chief.rules.bar_high_demand} xP (adjusted) without leaving the other manager worse off.</div>`;
   return `<div class="grid2">${trades.map(t => { const g = pl(t.give), r = pl(t.get); return `<div class="card">
     <div class="move"><div class="side out"><small>Offer</small><div class="pname">${esc(g.name)}</div><div class="muted" style="font-size:13px">${g.team} · ${f1(g.xp_total)} xP</div></div>
     <div class="arrow">⇄</div><div class="side in"><small>Ask for</small><div class="pname">${esc(r.name)}</div><div class="muted" style="font-size:13px">${r.team} · ${f1(r.xp_total)} xP</div></div></div>
@@ -722,6 +733,8 @@ function method() {
       <li>Team goals: from published match odds when available (70%), otherwise from season xG and goals for and against, with home advantage.</li>
       <li>Player goals and assists: xG and xA per 90, blending the season with the last six matches (${Math.round(R.model_params.recent_weight * 100)}% recent), scaled by the fixture.</li>
       <li>Clean sheets, goals conceded, saves, bonus, defensive contributions and cards use your league's own scoring settings.</li>
+      <li>Decisions: 3-gameweek gains, shrunk ${Math.round((1 - R.chief.rules.gain_shrink) * 100)}% to match reality (replays showed a predicted 6.4 gap came out at 4.9). The bar to swap depends on what you'd lose: +${R.chief.rules.bar_low_demand} if no rival would claim the player you drop, +${R.chief.rules.bar_high_demand} if one would, +${R.chief.rules.soft_lock_gap} for soft locks. A weighted ${R.chief.view.length}-gameweek view breaks near-ties. Replays found little difference between 1-, 3- and 5-gameweek horizons.</li>
+      <li>Second opinion: FPL's own expected points are shown beside ours, and each claim says whether FPL's model agrees.</li>
       <li>Scout intel then adjusts availability, start chances, penalty duty or output. The newest confirmed claim wins outright. Rumours count 25% from one website and 75% when two or more independent websites agree. Fan speculation is shown but never counted. Each website's past accuracy scales its weight.</li>
       <li>Ranges come from 2,000 simulated runs of each match: 80% of outcomes fall inside.</li>
       <li>Settings were tuned by replaying past gameweeks. See the Track record tab.</li></ul></div>
