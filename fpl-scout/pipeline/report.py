@@ -247,7 +247,7 @@ def main():
                 b["p_land"] = round(probs[(b["id"], m["out"])], 2)
         claim_ev = round(claim_ev, 1)
     final = None
-    if cfg.get("final_claims") and cfg.get("final_claims_gw") == next_gw:
+    if cfg.get("final_claims_gw") == next_gw:
         from draft_intel import simulate_waivers
         fc = [(c["in"], c["out"]) for c in cfg["final_claims"] if c["in"] in P and c["out"] in P]
         rl = {e: r["targets"] for e, r in rivals.items()}
