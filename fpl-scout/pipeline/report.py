@@ -288,7 +288,7 @@ def main():
         "speech": chief_speech(verdict, moves, short, medium, P, dec, len(horizon)),
         "xi_now": xi_now, "xi_after": xi_after,
         "flags": model.gw_flags(),
-        "trades": trades, "watchlist": watch, "claims_expected_gain": claim_ev, "final_claims": final,
+        "trades": trades, "watchlist": watch, "claims_expected_gain": claim_ev, "final_claims": final, "final_note": cfg.get("final_claims_note"),
         "squad_xp": round(sum(p["xp_total"] for p in squad), 1),
     }
 

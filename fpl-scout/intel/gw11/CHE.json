@@ -1,7 +1,7 @@
 {
  "club": "CHE",
- "generated": "2026-11-20T08:55Z",
- "summary": "João Pedro might make the Leeds game, but nothing is guaranteed after three missed league matches; treat him as a doubt. I found no current news on Estêvão. The only injury stories were from April.",
+ "generated": "2026-11-20T10:00Z",
+ "summary": "With João Pedro out, Rogers has moved up front and two previews have Estêvão starting against Leeds. When João Pedro returns, Estêvão is the likeliest to lose his place.",
  "claims": [
   {
    "player_id": 165,
@@ -32,6 +32,38 @@
     "avail": 0.1,
     "gameweeks": [
      11
+    ]
+   }
+  },
+  {
+   "player_id": 157,
+   "player": "Estêvão",
+   "text": "Predicted to start behind Rogers with Palmer, as Rogers moves up front while João Pedro is out.",
+   "source_name": "Brit Brief, Chelsea XI vs Leeds",
+   "source_url": "https://britbrief.co.uk/sports/football/chelsea-vs-leeds-martinez-starts-joao-pedro-out.html",
+   "date": "2026-11-20",
+   "tag": "rumour",
+   "effect": {
+    "start_prob": 0.75,
+    "gameweeks": [
+     11,
+     12
+    ]
+   }
+  },
+  {
+   "player_id": 157,
+   "player": "Estêvão",
+   "text": "Named in the predicted 4-2-3-1 to start against Leeds.",
+   "source_name": "Yardbarker, Chelsea predicted line-up vs Leeds",
+   "source_url": "https://www.yardbarker.com/soccer/articles/martinez_acheampong_and_estevao_to_start_4_2_3_1_chelsea_predicted_lineup_vs_leeds_united/s1_17736_44583372",
+   "date": "2026-11-19",
+   "tag": "rumour",
+   "effect": {
+    "start_prob": 0.75,
+    "gameweeks": [
+     11,
+     12
     ]
    }
   }

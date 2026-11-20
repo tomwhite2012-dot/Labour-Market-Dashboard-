@@ -1,7 +1,7 @@
 {
  "club": "BHA",
- "generated": "2026-11-19T17:20Z",
- "summary": "Hinshelwood is a bench option: he came on in the 78th minute against Brentford, and the lineup sites only give him a coin-flip chance of starting at Hull.",
+ "generated": "2026-11-20T10:00Z",
+ "summary": "Hinshelwood is sixth in Brighton's midfield pecking order by minutes (Groß, Gómez and Ayari start every week). High ceiling in the league's best attack if he gets back in; no sign of a league start at Hull.",
  "claims": [
   {
    "player_id": 123,
@@ -20,6 +20,15 @@
    "source_url": "https://www.lineup-builder.co.uk/clubs/brighton",
    "date": "2026-11-19",
    "tag": "fan_speculation"
+  },
+  {
+   "player_id": 123,
+   "player": "Hinshelwood",
+   "text": "Says he is working to get back into the starting line-up after his injury; no sign yet of a league start.",
+   "source_name": "Sussex Express",
+   "source_url": "https://www.sussexexpress.co.uk/sport/football/brighton-and-hove-albion/angry-with-myself-brighton-star-jack-hinshelwood-opens-up-on-injury-blow-9348866",
+   "date": "2026-11-13",
+   "tag": "confirmed"
   }
  ]
 }

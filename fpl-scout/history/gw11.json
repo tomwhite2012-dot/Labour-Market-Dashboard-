@@ -1,6 +1,6 @@
 {
  "gw": 11,
- "generated": "2026-11-20T09:34+00:00",
+ "generated": "2026-11-20T10:11+00:00",
  "horizon": [
   11,
   12,
@@ -54,35 +54,6 @@
    "threats": []
   },
   {
-   "in": 455,
-   "out": 157,
-   "gain": 5.45,
-   "gain_raw": 6.81,
-   "gain_view": 6.47,
-   "gain_next": 2.1,
-   "bar": 1.5,
-   "bar_reason": "no rival is likely to want Est\u00eav\u00e3o (plenty of better free agents)",
-   "soft_lock": false,
-   "fpl": "agrees",
-   "backups": [
-    {
-     "id": 372,
-     "gain": 5.12,
-     "p_land": 0.09
-    },
-    {
-     "id": 619,
-     "gain": 4.95,
-     "p_land": 0.14
-    }
-   ],
-   "p_land": 0.3,
-   "threats": [
-    "Eddie McGoldfish",
-    "Owlfish-Inge InLand"
-   ]
-  },
-  {
    "in": 91,
    "out": 588,
    "gain": 4.78,
@@ -97,16 +68,45 @@
     {
      "id": 502,
      "gain": 3.98,
-     "p_land": 0.08
+     "p_land": 0.1
     },
     {
      "id": 176,
      "gain": 3.22,
-     "p_land": 0.24
+     "p_land": 0.25
     }
    ],
-   "p_land": 0.3,
+   "p_land": 0.36,
    "threats": []
+  },
+  {
+   "in": 455,
+   "out": 157,
+   "gain": 3.8,
+   "gain_raw": 4.75,
+   "gain_view": 4.94,
+   "gain_next": 1.24,
+   "bar": 1.5,
+   "bar_reason": "no rival is likely to want Est\u00eav\u00e3o (plenty of better free agents)",
+   "soft_lock": false,
+   "fpl": "agrees",
+   "backups": [
+    {
+     "id": 372,
+     "gain": 3.47,
+     "p_land": 0.07
+    },
+    {
+     "id": 619,
+     "gain": 3.3,
+     "p_land": 0.12
+    }
+   ],
+   "p_land": 0.26,
+   "threats": [
+    "Eddie McGoldfish",
+    "Owlfish-Inge InLand"
+   ]
   },
   {
    "in": 194,
@@ -249,6 +249,18 @@
    "domains": [
     "3addedminutes.com",
     "thechelseachronicle.com"
+   ],
+   "ignored": 0
+  },
+  {
+   "player_id": 157,
+   "effect": "start_prob",
+   "value": 0.75,
+   "weight": 0.75,
+   "basis": "2 independent sources",
+   "domains": [
+    "britbrief.co.uk",
+    "yardbarker.com"
    ],
    "ignored": 0
   }

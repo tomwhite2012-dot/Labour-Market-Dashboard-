@@ -50,20 +50,12 @@
   ],
   "final_claims": [
     {
-      "in": 542,
-      "out": 123
-    },
-    {
       "in": 472,
       "out": 36
     },
     {
-      "in": 455,
-      "out": 157
-    },
-    {
-      "in": 69,
-      "out": 157
+      "in": 91,
+      "out": 588
     }
   ],
   "final_claims_gw": 11,
@@ -81,5 +73,6 @@
     0.7,
     0.6,
     0.5
-  ]
+  ],
+  "final_claims_note": "You're holding Hinshelwood and Estêvão: with no free midfielder to drop outside your soft locks, this week's claims are defensive. Le Fée is only reachable by dropping Szoboszlai. Drop Estêvão once João Pedro is back; reclaim nobody until Hinshelwood starts league games. Keep Wissa and João Pedro."
 }
