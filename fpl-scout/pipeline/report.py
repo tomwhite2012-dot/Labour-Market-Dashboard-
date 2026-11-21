@@ -108,8 +108,12 @@ def pick_vs_squad(cand, squad, locked, dec, demand):
 
 
 # ---------------------------------------------------------------- track record
-def write_history(cfg, gw, chief, decisions):
+def write_history(cfg, gw, chief, decisions, waivers_processed=False):
+    """Save this gameweek's advice. Once waivers have processed, the pre-waiver advice is final
+    and is what the track record grades, so it is never overwritten."""
     os.makedirs(os.path.join(ROOT, "history"), exist_ok=True)
+    if waivers_processed and os.path.exists(os.path.join(ROOT, "history", f"gw{gw}.json")):
+        return
     rec = {"gw": gw, "generated": datetime.now(timezone.utc).isoformat(timespec="minutes"),
            "horizon": chief["horizon"], "verdict": chief["verdict"], "moves": chief["moves"],
            "short_term": chief["short_term"], "medium_term": chief["medium_term"],
@@ -391,7 +395,7 @@ def main():
     os.makedirs(os.path.join(ROOT, "web", "data"), exist_ok=True)
     with open(os.path.join(ROOT, "web", "data", "report.json"), "w") as f:
         json.dump(report, f, separators=(",", ":"))
-    write_history(cfg, next_gw, chief, decisions)
+    write_history(cfg, next_gw, chief, decisions, data["game"].get("waivers_processed", False))
     print(f"GW{next_gw} verdict: {verdict}")
     for line in chief["speech"]:
         print(" -", line)
