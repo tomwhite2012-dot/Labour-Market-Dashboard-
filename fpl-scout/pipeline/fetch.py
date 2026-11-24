@@ -60,6 +60,10 @@ def fetch_all(entry_id, league_id, use_cache=False):
 
     current = d["game"]["current_event"] or 0
     finished = d["game"]["current_event_finished"]
+    # treat the current gameweek as done once every match is provisionally finished (bonus may still be pending)
+    cur_fx = [f for f in d["fixtures"] if f.get("event") == current]
+    if not finished and cur_fx and all(f.get("finished") or f.get("finished_provisional") for f in cur_fx):
+        finished = True
     last_done = current if finished else current - 1
     d["live"] = {}
     for gw in range(1, last_done + 1):

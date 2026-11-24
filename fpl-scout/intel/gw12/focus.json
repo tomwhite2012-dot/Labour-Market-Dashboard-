@@ -1,0 +1,321 @@
+{
+ "gw": 12,
+ "clubs": [
+  {
+   "club": "COV",
+   "score": 10,
+   "players": [
+    {
+     "id": 91,
+     "name": "Pinnock",
+     "pos": "DEF",
+     "why": [
+      "your squad"
+     ],
+     "status": "a",
+     "news": ""
+    },
+    {
+     "id": 194,
+     "name": "Thomas-Asante",
+     "pos": "FWD",
+     "why": [
+      "recommended claim"
+     ],
+     "status": "a",
+     "news": ""
+    },
+    {
+     "id": 598,
+     "name": "Cherif",
+     "pos": "FWD",
+     "why": [
+      "backup claim"
+     ],
+     "status": "a",
+     "news": ""
+    }
+   ]
+  },
+  {
+   "club": "FUL",
+   "score": 10,
+   "players": [
+    {
+     "id": 250,
+     "name": "Leno",
+     "pos": "GKP",
+     "why": [
+      "your squad"
+     ],
+     "status": "a",
+     "news": ""
+    },
+    {
+     "id": 640,
+     "name": "Affengruber",
+     "pos": "DEF",
+     "why": [
+      "medium-term pick",
+      "recommended claim",
+      "top free agent"
+     ],
+     "status": "a",
+     "news": ""
+    },
+    {
+     "id": 261,
+     "name": "Iwobi",
+     "pos": "MID",
+     "why": [
+      "backup claim",
+      "top free agent"
+     ],
+     "status": "a",
+     "news": ""
+    }
+   ]
+  },
+  {
+   "club": "LEE",
+   "score": 8,
+   "players": [
+    {
+     "id": 330,
+     "name": "Bogle",
+     "pos": "DEF",
+     "why": [
+      "your squad"
+     ],
+     "status": "a",
+     "news": ""
+    },
+    {
+     "id": 599,
+     "name": "Elvedi",
+     "pos": "DEF",
+     "why": [
+      "backup claim",
+      "top free agent"
+     ],
+     "status": "a",
+     "news": ""
+    },
+    {
+     "id": 338,
+     "name": "Ampadu",
+     "pos": "MID",
+     "why": [
+      "backup claim",
+      "top free agent"
+     ],
+     "status": "a",
+     "news": ""
+    }
+   ]
+  },
+  {
+   "club": "NFO",
+   "score": 7,
+   "players": [
+    {
+     "id": 472,
+     "name": "Murillo",
+     "pos": "DEF",
+     "why": [
+      "your squad"
+     ],
+     "status": "a",
+     "news": ""
+    },
+    {
+     "id": 486,
+     "name": "McAtee",
+     "pos": "MID",
+     "why": [
+      "recommended claim",
+      "top free agent"
+     ],
+     "status": "a",
+     "news": ""
+    }
+   ]
+  },
+  {
+   "club": "CHE",
+   "score": 6,
+   "players": [
+    {
+     "id": 157,
+     "name": "Estêvão",
+     "pos": "MID",
+     "why": [
+      "recommended drop",
+      "your squad"
+     ],
+     "status": "a",
+     "news": ""
+    },
+    {
+     "id": 165,
+     "name": "João Pedro",
+     "pos": "FWD",
+     "why": [
+      "recommended drop",
+      "your squad"
+     ],
+     "status": "i",
+     "news": "Thigh injury - Unknown return date"
+    }
+   ]
+  },
+  {
+   "club": "LIV",
+   "score": 5,
+   "players": [
+    {
+     "id": 367,
+     "name": "Gakpo",
+     "pos": "MID",
+     "why": [
+      "recommended drop",
+      "your squad"
+     ],
+     "status": "d",
+     "news": "Calf injury - 75% chance of playing"
+    },
+    {
+     "id": 368,
+     "name": "Szoboszlai",
+     "pos": "MID",
+     "why": [
+      "your squad"
+     ],
+     "status": "a",
+     "news": ""
+    }
+   ]
+  },
+  {
+   "club": "AVL",
+   "score": 5,
+   "players": [
+    {
+     "id": 47,
+     "name": "Kamara",
+     "pos": "MID",
+     "why": [
+      "recommended claim",
+      "top free agent"
+     ],
+     "status": "a",
+     "news": ""
+    }
+   ]
+  },
+  {
+   "club": "IPS",
+   "score": 5,
+   "players": [
+    {
+     "id": 591,
+     "name": "Enciso",
+     "pos": "MID",
+     "why": [
+      "recommended claim",
+      "short-term pick",
+      "top free agent"
+     ],
+     "status": "a",
+     "news": ""
+    }
+   ]
+  },
+  {
+   "club": "ARS",
+   "score": 4,
+   "players": [
+    {
+     "id": 8,
+     "name": "Calafiori",
+     "pos": "DEF",
+     "why": [
+      "your squad"
+     ],
+     "status": "a",
+     "news": ""
+    },
+    {
+     "id": 13,
+     "name": "Rice",
+     "pos": "MID",
+     "why": [
+      "your squad"
+     ],
+     "status": "a",
+     "news": ""
+    }
+   ]
+  },
+  {
+   "club": "NEW",
+   "score": 4,
+   "players": [
+    {
+     "id": 464,
+     "name": "Wissa",
+     "pos": "FWD",
+     "why": [
+      "your squad"
+     ],
+     "status": "a",
+     "news": ""
+    },
+    {
+     "id": 566,
+     "name": "Horníček",
+     "pos": "GKP",
+     "why": [
+      "your squad"
+     ],
+     "status": "a",
+     "news": ""
+    }
+   ]
+  },
+  {
+   "club": "BHA",
+   "score": 3,
+   "players": [
+    {
+     "id": 123,
+     "name": "Hinshelwood",
+     "pos": "MID",
+     "why": [
+      "recommended drop",
+      "your squad"
+     ],
+     "status": "a",
+     "news": ""
+    }
+   ]
+  },
+  {
+   "club": "MCI",
+   "score": 3,
+   "players": [
+    {
+     "id": 389,
+     "name": "Matheus N.",
+     "pos": "DEF",
+     "why": [
+      "recommended drop",
+      "your squad"
+     ],
+     "status": "a",
+     "news": ""
+    }
+   ]
+  }
+ ]
+}

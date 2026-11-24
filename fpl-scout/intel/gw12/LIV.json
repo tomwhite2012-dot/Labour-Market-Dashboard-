@@ -1,0 +1,31 @@
+{
+ "club": "LIV",
+ "generated": "2026-11-24T07:20Z",
+ "summary": "Gakpo has a calf (soleus) strain from international duty and hasn't trained since the break; Everton on 29 Nov is a 'chance' at best. Szoboszlai started and scored 9 against Man Utd.",
+ "claims": [
+  {
+   "player_id": 367,
+   "player": "Gakpo",
+   "text": "Soleus (calf) injury picked up with the Netherlands; not trained with Liverpool since the break; no return date given.",
+   "source_name": "Sports Mole, Iraola explains Gakpo absence",
+   "source_url": "https://www.sportsmole.co.uk/football/liverpool/injury-news/news/iraola-explains-gakpo-gravenberch-absences-from-liverpool-vs-man-utd_609634.html",
+   "date": "2026-11-22",
+   "tag": "confirmed"
+  },
+  {
+   "player_id": 367,
+   "player": "Gakpo",
+   "text": "Possible return against Everton on 29 November, but expected to miss midweek; a mild strain would mean up to two weeks out.",
+   "source_name": "Sports Mole, Liverpool injury list vs Club Brugge",
+   "source_url": "https://www.sportsmole.co.uk/football/liverpool/champions-league/injuries-and-suspensions/gakpo-gravenberch-latest-liverpool-injury-suspension-list-vs-club-brugge_609620.html",
+   "date": "2026-11-23",
+   "tag": "rumour",
+   "effect": {
+    "avail": 0.35,
+    "gameweeks": [
+     12
+    ]
+   }
+  }
+ ]
+}

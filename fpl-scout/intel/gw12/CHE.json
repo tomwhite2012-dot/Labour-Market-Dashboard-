@@ -1,0 +1,22 @@
+{
+ "club": "CHE",
+ "generated": "2026-11-24T07:20Z",
+ "summary": "João Pedro is still out and not training with the team; Alonso is judging him game by game. Estêvão played 63 minutes in the 1-4 home defeat to Leeds.",
+ "claims": [
+  {
+   "player_id": 165,
+   "player": "João Pedro",
+   "text": "Alonso: not ready to train with the squad; 'we need to see game by game how he's feeling'.",
+   "source_name": "The False 9, João Pedro injury update",
+   "source_url": "https://thefalse9.com/2026/11/joao-pedro-injury-update-not-training-leeds-20-november.html",
+   "date": "2026-11-20",
+   "tag": "confirmed",
+   "effect": {
+    "avail": 0.0,
+    "gameweeks": [
+     12
+    ]
+   }
+  }
+ ]
+}

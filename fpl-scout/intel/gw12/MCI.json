@@ -1,0 +1,24 @@
+{
+ "club": "MCI",
+ "generated": "2026-11-24T07:20Z",
+ "summary": "Matheus Nunes has recovered from the ankle problem that kept him out against Fulham. Maresca: 'Matheus is back.' Whether he goes straight back into the XI is unclear.",
+ "claims": [
+  {
+   "player_id": 389,
+   "player": "Matheus N.",
+   "text": "Maresca: 'Matheus is back' after missing the Fulham game with an ankle problem; available for Napoli midweek.",
+   "source_name": "Sports Mole, Maresca Nunes update",
+   "source_url": "https://www.sportsmole.co.uk/football/man-city/injury-news/news/maresca-delivers-latest-nunes-injury-update-before-man-city-vs-napoli_609687.html",
+   "date": "2026-11-24",
+   "tag": "confirmed",
+   "effect": {
+    "avail": 1.0,
+    "gameweeks": [
+     12,
+     13,
+     14
+    ]
+   }
+  }
+ ]
+}

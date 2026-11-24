@@ -140,7 +140,7 @@ class Model:
         self.team_goals = defaultdict(dict)         # team -> gw -> (gf, ga)
         for f in self.fixtures:
             gw = f.get("event")
-            if not f.get("finished") or not gw or gw > self.last_done:
+            if not (f.get("finished") or f.get("finished_provisional")) or not gw or gw > self.last_done:
                 continue
             h, a = f["team_h"], f["team_a"]
             hs, as_ = f["team_h_score"] or 0, f["team_a_score"] or 0

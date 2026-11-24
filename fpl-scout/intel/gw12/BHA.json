@@ -1,0 +1,16 @@
+{
+ "club": "BHA",
+ "generated": "2026-11-24T07:20Z",
+ "summary": "Hinshelwood came on for Ayari in the 2-0 defeat at Hull and was rated poorly; Gómez and Andrés were Brighton's best midfielders. Still a bench option.",
+ "claims": [
+  {
+   "player_id": 123,
+   "player": "Hinshelwood",
+   "text": "Came on for Ayari at Hull; rated 4.75 and 'could not replicate the energy' of the man he replaced.",
+   "source_name": "We Are Brighton, Hull 2-0 Brighton player ratings",
+   "source_url": "https://www.wearebrighton.com/matchday/hull-2-0-brighton-player-ratings-gomez-and-andres-lead-the-way-to-make-subs-look-strange/",
+   "date": "2026-11-22",
+   "tag": "fan_speculation"
+  }
+ ]
+}
