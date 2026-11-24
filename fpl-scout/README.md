@@ -44,8 +44,8 @@ These rules were set after replaying GW4–10 (see `pipeline/backtest.py`):
   - **+2.5 xP** when one would: he'd be a top-3 free agent in his position, or he's a proven scorer worth
     stashing while injured.
   - Otherwise the verdict is **HOLD**.
-- **Soft locks.** Locked players (Calafiori, Matheus Nunes, Gakpo, Rice, Szoboszlai, João Pedro) are dropped only
-  for an adjusted gain of **+4 xP** or more. Your judgement holds unless the evidence is overwhelming.
+- **Hard locks.** Locked players (Calafiori, Matheus Nunes, Gakpo, Rice, Szoboszlai, João Pedro) are never dropped,
+  even when injured. In Draft, a dropped star is claimed by a rival and lost for the season.
 - **Horizon.** Decisions use the next 3 gameweeks. Replays found almost no difference between 1, 3 and 5. A
   weighted 5-gameweek view (weights 1, .85, .7, .6, .5) breaks near-ties and helps with stashes.
 - **Second opinion.** FPL's own expected points are shown beside ours, and each claim says whether FPL's model

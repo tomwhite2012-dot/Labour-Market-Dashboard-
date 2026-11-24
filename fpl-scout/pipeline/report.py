@@ -42,7 +42,7 @@ def fpl_verdict(i, o):
 def swap_bar(o, dec, demand, locked):
     """The adjusted xP gain needed to drop player `o`, and why."""
     if o["id"] in locked:
-        return dec["soft_lock_gap"], f"soft lock: only dropped for a big upgrade"
+        return None, "locked: never dropped"   # hard lock: in Draft a dropped star is lost for the season
     dm = demand.get(o["id"], {"p": 0, "why": ""})
     if dm["p"] >= dec["demand_cutoff"]:
         return dec["bar_high_demand"], f"rivals would likely claim {o['name']} ({dm['why']})"
@@ -73,6 +73,8 @@ def plan_moves(squad, pool, locked, dec, demand, max_moves=5):
             if o["id"] in used_out:
                 continue
             bar, why = swap_bar(o, dec, demand, locked)
+            if bar is None:
+                continue
             for i in pool:
                 if i["pos"] != o["pos"] or i["id"] in used_in:
                     continue
@@ -103,7 +105,7 @@ def pick_vs_squad(cand, squad, locked, dec, demand):
     worst = min(same, key=lambda x: x["xp_total"])
     bar, why = swap_bar(worst, dec, demand, locked)
     mv = make_move(cand, worst, dec, bar, why, locked)
-    mv["meets_threshold"] = mv["gain"] >= bar
+    mv["meets_threshold"] = bar is not None and mv["gain"] >= bar
     return mv
 
 
@@ -167,7 +169,7 @@ def chief_speech(verdict, moves, short, medium, P, dec, horizon_n):
         for m in moves:
             land = f", about {int(round(m['p_land'] * 100))}% chance he reaches you" if m.get("p_land") is not None else ""
             fpl = {"agrees": " FPL's own model agrees.", "disagrees": " FPL's own model disagrees.", "neutral": ""}.get(m.get("fpl"), "")
-            lock = " (overrides your soft lock)" if m.get("soft_lock") else ""
+            lock = ""
             lines.append(f"Bring in {P[m['in']]['name']} for {P[m['out']]['name']}{lock}: +{m['gain']:.1f} xP over {horizon_n} gameweeks{land}.{fpl}")
     in_moves = {m["in"] for m in moves}
     if short:
@@ -220,7 +222,7 @@ def main():
     pool = [p for p in P.values() if p["owner"] is None]
     locked = set()
     for p in squad:
-        p["locked"] = p["name"] in cfg["locks"]          # soft lock: needs a big gain to drop
+        p["locked"] = p["name"] in cfg["locks"]          # hard lock: never dropped
         p["lock_released"] = False
         if p["locked"]:
             locked.add(p["id"])

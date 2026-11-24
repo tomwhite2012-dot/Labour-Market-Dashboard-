@@ -60,7 +60,7 @@
     "bar_low_demand": 1.5,
     "bar_high_demand": 2.5,
     "demand_cutoff": 0.3,
-    "soft_lock_gap": 4.0
+    "hard_locks": true
   },
   "view_gameweeks": 5,
   "view_weights": [

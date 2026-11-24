@@ -448,7 +448,7 @@ function playerTable(ids, opts = {}) {
   const gws = R.meta.horizon;
   const rows = ids.map(id => {
     const p = pl(id); if (!p) return "";
-    const lock = p.locked ? ` <span class="pill info" title="Soft lock: only dropped for an adjusted gain of +${R.chief.rules.soft_lock_gap} xP or more">Soft lock</span>` : "";
+    const lock = p.locked ? ' <span class="pill info" title="Locked: never dropped. In Draft a dropped star is lost to a rival for the season.">Locked</span>' : "";
     const fx = p.gws.map(g => `<td class="r" title="${esc(g.fixtures.map(fixtureLabel).join(" + ") || "No fixture")}">${f1(g.xp)}</td>`).join("");
     return `<tr${p.owner === ME && opts.markMine ? ' class="me"' : ""}>
       <td class="name"><b>${esc(p.name)}</b>${statusPill(p)}${lock}<div class="muted" style="font-size:12px">${esc(p.team)} · ${p.pos}</div></td>
@@ -635,7 +635,7 @@ function chiefReport(inDrawer) {
     : `<li>No double or blank gameweeks in the published fixtures for the next ${10} gameweeks.</li>`;
   return `
     <div class="card verdict-card"><div class="vbadge ${v}">${c.verdict}</div>
-      <div><b>${esc(c.speech[0])}</b><div class="muted" style="font-size:13px">Rules: gains are expected points over GW${R.meta.horizon[0]}–${R.meta.horizon[H - 1]}, shrunk ${Math.round((1 - c.rules.gain_shrink) * 100)}% because the model's gaps run large. A swap must clear <b>+${c.rules.bar_low_demand}</b> when no rival would want the player you drop, <b>+${c.rules.bar_high_demand}</b> when one would, and <b>+${c.rules.soft_lock_gap}</b> for soft-locked players. Near-ties are settled by the weighted ${c.view.length}-gameweek view.</div></div></div>
+      <div><b>${esc(c.speech[0])}</b><div class="muted" style="font-size:13px">Rules: gains are expected points over GW${R.meta.horizon[0]}–${R.meta.horizon[H - 1]}, shrunk ${Math.round((1 - c.rules.gain_shrink) * 100)}% because the model's gaps run large. A swap must clear <b>+${c.rules.bar_low_demand}</b> when no rival would want the player you drop, <b>+${c.rules.bar_high_demand}</b> when one would. Locked players are never dropped: in Draft, a rival would claim them for the season. Near-ties are settled by the weighted ${c.view.length}-gameweek view.</div></div></div>
     ${c.speech.length > 1 ? `<ul class="plain">${c.speech.slice(1).map(s => `<li>${esc(s)}</li>`).join("")}</ul>` : ""}
     ${c.final_claims && !c.final_claims.length && c.final_note ? `<div class="sub">Your decision this week</div><div class="card"><div class="kv" style="margin-top:0"><span class="pill info">Hold: no waiver claims</span></div><p style="margin:8px 0 0">${esc(c.final_note)}</p></div>` : ""}
     ${c.final_claims && c.final_claims.length ? `<div class="sub">Your final waiver list, in this order</div><div class="card">
@@ -734,7 +734,7 @@ function method() {
       <li>Team goals: from published match odds when available (70%), otherwise from season xG and goals for and against, with home advantage.</li>
       <li>Player goals and assists: xG and xA per 90, blending the season with the last six matches (${Math.round(R.model_params.recent_weight * 100)}% recent), scaled by the fixture.</li>
       <li>Clean sheets, goals conceded, saves, bonus, defensive contributions and cards use your league's own scoring settings.</li>
-      <li>Decisions: 3-gameweek gains, shrunk ${Math.round((1 - R.chief.rules.gain_shrink) * 100)}% to match reality (replays showed a predicted 6.4 gap came out at 4.9). The bar to swap depends on what you'd lose: +${R.chief.rules.bar_low_demand} if no rival would claim the player you drop, +${R.chief.rules.bar_high_demand} if one would, +${R.chief.rules.soft_lock_gap} for soft locks. A weighted ${R.chief.view.length}-gameweek view breaks near-ties. Replays found little difference between 1-, 3- and 5-gameweek horizons.</li>
+      <li>Decisions: 3-gameweek gains, shrunk ${Math.round((1 - R.chief.rules.gain_shrink) * 100)}% to match reality (replays showed a predicted 6.4 gap came out at 4.9). The bar to swap depends on what you'd lose: +${R.chief.rules.bar_low_demand} if no rival would claim the player you drop, +${R.chief.rules.bar_high_demand} if one would. Locked players are never dropped. A weighted ${R.chief.view.length}-gameweek view breaks near-ties. Replays found little difference between 1-, 3- and 5-gameweek horizons.</li>
       <li>Second opinion: FPL's own expected points are shown beside ours, and each claim says whether FPL's model agrees.</li>
       <li>Scout intel then adjusts availability, start chances, penalty duty or output. The newest confirmed claim wins outright. Rumours count 25% from one website and 75% when two or more independent websites agree. Fan speculation is shown but never counted. Each website's past accuracy scales its weight.</li>
       <li>Ranges come from 2,000 simulated runs of each match: 80% of outcomes fall inside.</li>
