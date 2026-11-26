@@ -1,7 +1,7 @@
 {
  "club": "CHE",
- "generated": "2026-11-24T07:20Z",
- "summary": "João Pedro is still out and not training with the team; Alonso is judging him game by game. Estêvão played 63 minutes in the 1-4 home defeat to Leeds.",
+ "generated": "2026-11-26T16:10Z",
+ "summary": "João Pedro is out until around the New Year (Alonso). That keeps the door open for Estêvão; Chelsea's team news is still to come.",
  "claims": [
   {
    "player_id": 165,
@@ -15,6 +15,25 @@
     "avail": 0.0,
     "gameweeks": [
      12
+    ]
+   }
+  },
+  {
+   "player_id": 165,
+   "player": "João Pedro",
+   "text": "Alonso: out for at least a few more weeks, now targeting a New Year comeback.",
+   "source_name": "3 Added Minutes, GW12 injury news",
+   "source_url": "https://www.3addedminutes.com/sport/football/arsenal-fc/raya-gakpo-joao-pedro-fantasy-premier-league-injury-news-9375205",
+   "date": "2026-11-26",
+   "tag": "confirmed",
+   "effect": {
+    "avail": 0.0,
+    "gameweeks": [
+     12,
+     13,
+     14,
+     15,
+     16
     ]
    }
   }

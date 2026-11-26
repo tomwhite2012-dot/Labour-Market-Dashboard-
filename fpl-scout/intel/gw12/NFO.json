@@ -1,7 +1,7 @@
 {
  "club": "NFO",
- "generated": "2026-11-24T07:20Z",
- "summary": "McAtee has started every league game under Glasner and leads Forest for final-third passes. Murillo played 90 minutes in the 2-0 defeat at Bournemouth.",
+ "generated": "2026-11-26T16:10Z",
+ "summary": "Glasner has a near-full squad for Chelsea on Friday night: only Domínguez and Savona are out. McAtee and Murillo are fine.",
  "claims": [
   {
    "player_id": null,
@@ -11,6 +11,15 @@
    "source_url": "https://azat.tv/en/james-mcatee-nottingham-forest-oliver-glasner-rise/",
    "date": "2026-11-19",
    "tag": "rumour"
+  },
+  {
+   "player_id": 486,
+   "player": "McAtee",
+   "text": "Glasner: only Domínguez and Savona are missing; everyone else is available.",
+   "source_name": "Fantasy Football Scout, GW12 Thursday team news",
+   "source_url": "https://www.fantasyfootballscout.co.uk/2026/11/26/fpl-gameweek-12-team-news-thursdays-live-injury-updates-2",
+   "date": "2026-11-26",
+   "tag": "confirmed"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "gw": 12,
- "generated": "2026-11-24T07:29+00:00",
+ "generated": "2026-11-26T15:57+00:00",
  "horizon": [
   12,
   13,
@@ -31,7 +31,7 @@
      "p_land": 0.05
     }
    ],
-   "p_land": 0.78,
+   "p_land": 0.79,
    "threats": [
     "Eddie McGoldfish",
     "Owlfish-Inge InLand"
@@ -57,10 +57,10 @@
     {
      "id": 338,
      "gain": 3.96,
-     "p_land": 0.1
+     "p_land": 0.11
     }
    ],
-   "p_land": 0.59,
+   "p_land": 0.58,
    "threats": []
   }
  ],
@@ -124,9 +124,9 @@
    "weight": 1.0,
    "basis": "confirmed",
    "domains": [
-    "thefalse9.com"
+    "3addedminutes.com"
    ],
-   "ignored": 0
+   "ignored": 1
   }
  ]
 }
