@@ -1,7 +1,7 @@
 {
  "club": "BHA",
- "generated": "2026-11-24T07:20Z",
- "summary": "Hinshelwood came on for Ayari in the 2-0 defeat at Hull and was rated poorly; Gómez and Andrés were Brighton's best midfielders. Still a bench option.",
+ "generated": "2026-11-26T16:40Z",
+ "summary": "Yalcouyé is out for six to 10 weeks, but he was a substitute, not a starter: Groß, Gómez, Ayari and Andrés have started every league game. Hinshelwood moves up to first midfield substitute and is predicted to start the Conference League tie on Thursday. A league start against Newcastle on Sunday is unlikely unless Brighton rotate.",
  "claims": [
   {
    "player_id": 123,
@@ -11,6 +11,24 @@
    "source_url": "https://www.wearebrighton.com/matchday/hull-2-0-brighton-player-ratings-gomez-and-andres-lead-the-way-to-make-subs-look-strange/",
    "date": "2026-11-22",
    "tag": "fan_speculation"
+  },
+  {
+   "player_id": null,
+   "player": "Yalcouyé",
+   "text": "Hurzeler: knee injury from Ivory Coast duty, out for six to 10 weeks.",
+   "source_name": "Sussex Express, Brighton confirm major injury blow",
+   "source_url": "https://www.sussexexpress.co.uk/sport/football/brighton-and-hove-albion/brighton-confirm-major-injury-blow-ahead-of-conference-league-clash-9373900",
+   "date": "2026-11-25",
+   "tag": "confirmed"
+  },
+  {
+   "player_id": 123,
+   "player": "Hinshelwood",
+   "text": "Predicted to start in the No 10 role against Craiova in the Conference League on Thursday, with Gómez possibly rested.",
+   "source_name": "Sussex Express, Brighton XI vs Craiova predicted",
+   "source_url": "https://www.sussexexpress.co.uk/sport/football/brighton-and-hove-albion/promise-david-and-femi-azeez-decision-fabian-hurzelers-brighton-xi-to-face-craiova-predicted-9374997",
+   "date": "2026-11-26",
+   "tag": "rumour"
   }
  ]
 }
