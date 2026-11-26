@@ -50,11 +50,23 @@
   ],
   "final_claims": [
     {
-      "in": 472,
-      "out": 36
+      "in": 170,
+      "out": 464
+    },
+    {
+      "in": 271,
+      "out": 464
+    },
+    {
+      "in": 591,
+      "out": 157
+    },
+    {
+      "in": 286,
+      "out": 157
     }
   ],
-  "final_claims_gw": 11,
+  "final_claims_gw": 12,
   "decision": {
     "gain_shrink": 0.8,
     "bar_low_demand": 1.5,
@@ -70,5 +82,5 @@
     0.6,
     0.5
   ],
-  "final_claims_note": "One claim this week: Murillo for Maatsen. He plays every minute, clears the defensive-contribution bar about half the time, and is a set-piece threat (second on Forest's direct free kicks; 1.25 xG this season). Holding everything else: Khalaili for his attacking upside under Palace's new manager, Estêvão while João Pedro is out, and Hinshelwood for his ceiling. Next week: drop Estêvão once João Pedro is back, and see whether Hinshelwood starts league games."
+  "final_claims_note": "Your GW12 list: Emegha leads Chelsea's line with João Pedro out until the New Year; Muniz only if Emegha goes elsewhere (he projects below Wissa, so consider removing that backup); Enciso for Estêvão, with Belloumi as the fallback. Not on your list: McAtee for Hinshelwood (+5.6). Put first, it lands about 79% of the time but cuts Emegha to about 60%; put last, it drops to about 28%."
 }
