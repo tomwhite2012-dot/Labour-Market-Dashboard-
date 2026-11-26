@@ -1,7 +1,7 @@
 {
  "club": "CHE",
- "generated": "2026-11-26T16:10Z",
- "summary": "João Pedro is out until around the New Year (Alonso). That keeps the door open for Estêvão; Chelsea's team news is still to come.",
+ "generated": "2026-11-26T16:15Z",
+ "summary": "João Pedro is out until about the New Year. Emegha, who scored on his first start against Leeds, is widely predicted to lead the line at Forest, with Palmer in the No 10 role. That puts more pressure on Estêvão's place.",
  "claims": [
   {
    "player_id": 165,
@@ -34,6 +34,40 @@
      14,
      15,
      16
+    ]
+   }
+  },
+  {
+   "player_id": 170,
+   "player": "Emegha",
+   "text": "Predicted to lead the line at Forest with João Pedro out; scored on his first league start against Leeds.",
+   "source_name": "Sports Mole, Chelsea predicted XI vs Forest",
+   "source_url": "https://www.sportsmole.co.uk/football/chelsea/predicted-lineups/who-starts-up-top-for-alonso-predicted-chelsea-xi-vs-nottingham-forest_609856.html",
+   "date": "2026-11-26",
+   "tag": "rumour",
+   "effect": {
+    "start_prob": 0.8,
+    "gameweeks": [
+     12,
+     13,
+     14
+    ]
+   }
+  },
+  {
+   "player_id": 170,
+   "player": "Emegha",
+   "text": "Expected to start up front instead of João Pedro, with Palmer behind him.",
+   "source_name": "3 Added Minutes, Chelsea predicted XI vs Forest",
+   "source_url": "https://www.3addedminutes.com/sport/football/chelsea-fc/chelsea-predicted-xi-nottingham-forest-key-changes-caicedo-pedro-9374948",
+   "date": "2026-11-26",
+   "tag": "rumour",
+   "effect": {
+    "start_prob": 0.8,
+    "gameweeks": [
+     12,
+     13,
+     14
     ]
    }
   }
