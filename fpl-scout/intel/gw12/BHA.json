@@ -1,7 +1,7 @@
 {
  "club": "BHA",
- "generated": "2026-11-26T16:40Z",
- "summary": "Yalcouyé is out for six to 10 weeks, but he was a substitute, not a starter: Groß, Gómez, Ayari and Andrés have started every league game. Hinshelwood moves up to first midfield substitute and is predicted to start the Conference League tie on Thursday. A league start against Newcastle on Sunday is unlikely unless Brighton rotate.",
+ "generated": "2026-11-27T16:30Z",
+ "summary": "Hinshelwood started and assisted in Thursday's 4-0 European win, a good sign for his form, but it makes a league start against Newcastle on Sunday less likely. Groß, Gómez, Ayari and Andrés have started every league game; Yalcouyé is out for six to 10 weeks and Mitoma is due back on 2 Dec.",
  "claims": [
   {
    "player_id": 123,
@@ -29,6 +29,15 @@
    "source_url": "https://www.sussexexpress.co.uk/sport/football/brighton-and-hove-albion/promise-david-and-femi-azeez-decision-fabian-hurzelers-brighton-xi-to-face-craiova-predicted-9374997",
    "date": "2026-11-26",
    "tag": "rumour"
+  },
+  {
+   "player_id": 123,
+   "player": "Hinshelwood",
+   "text": "Started and set up Osman's opener in the 4-0 Conference League win over Craiova on Thursday; also had a header and a shot saved.",
+   "source_name": "UEFA Conference League matchday 4 round-up",
+   "source_url": "https://www.uefa.com/uefaconferenceleague/news/02ab-222a90fb4a54-c9b21edef3d8-1000--uefa-conference-league-matchday-4-highlights-and-round-up-a/",
+   "date": "2026-11-26",
+   "tag": "confirmed"
   }
  ]
 }
